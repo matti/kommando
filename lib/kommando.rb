@@ -1,5 +1,5 @@
 require "kommando/version"
 
-module Kommando
+class Kommando
   # Your code goes here...
 end
