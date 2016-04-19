@@ -1,7 +1,7 @@
 require "pty"
 
-require "kommando/version"
-require "kommando/buffer"
+require_relative "kommando/version"
+require_relative "kommando/buffer"
 
 class Kommando
 
