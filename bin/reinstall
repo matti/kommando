@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+VERSION=$(ruby -r "./lib/kommando/version" -e "puts Kommando::VERSION")
+
+gem uninstall kommando
+gem build kommando.gemspec
+gem install kommando-$VERSION.gem
