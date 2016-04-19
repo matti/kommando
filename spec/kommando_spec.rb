@@ -5,7 +5,10 @@ describe Kommando do
     expect(Kommando::VERSION).not_to be nil
   end
 
-  it 'can be instantiated' do
-    expect(Kommando.new).to be_an_instance_of(Kommando)
+  describe 'initialization' do
+    it 'requires cmd as an argument' do
+      k = Kommando.new "uptime"
+      expect(k).to be_an_instance_of(Kommando)
+    end
   end
 end
