@@ -14,9 +14,21 @@ describe Kommando do
 
   describe 'running' do
     let(:uptime_kommand) { Kommando.new "uptime" }
+    let(:completed_uptime_kommand) do
+      uptime = Kommando.new "uptime"
+      uptime.run
+      uptime
+    end
 
     it 'runs the cmd' do
-      expect(uptime_kommand.run).to be_truthy
+      expect(uptime_kommand.run).to be true
+    end
+
+    describe 'out' do
+      it 'has the stdout' do
+        expect(completed_uptime_kommand.out).to match /\d days.+\d+ users, load averages:/
+      end
     end
   end
+
 end
