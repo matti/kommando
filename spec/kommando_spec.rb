@@ -26,7 +26,7 @@ describe Kommando do
 
     describe 'out' do
       it 'has the stdout' do
-        expect(completed_uptime_kommand.out).to match /\d days.+\d+ users, load averages:/
+        expect(completed_uptime_kommand.out).to match /\d+ users, load averages:/
       end
     end
   end
