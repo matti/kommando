@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require "./lib/kommando"
+
+find_examples = Kommando.new "find examples -type f -name *"
+find_examples.run
+
+for example in find_examples.out.split("\r\n") do
+  print "Running #{example} ".ljust(74, ".")
+  example = Kommando.new "ruby #{example}"
+  example.run
+
+  raise "Example #{example} did not exit cleanly" unless example.code == 0
+
+  puts " done"
+end
+
+puts ""
+puts "all good."
+exit 0
