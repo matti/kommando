@@ -3,8 +3,9 @@
 ## 0.0.next
 Writes standard out to file.
 
+ - FEAT: Support for command run timeouts with `Kommando.new "ping -c 1 google.com", timeout: 3.5`
  - FEAT: Write output to file with `Kommando.new "ping -c 1 google.com", output: "path/to/file.txt"`
- - EXAMPLES: `stdout_to_file` added.
+ - EXAMPLES: `stdout_to_file` and `timeout` added.
 
 ## 0.0.3
 Outputs to standard out while executing.
