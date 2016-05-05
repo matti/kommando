@@ -10,6 +10,13 @@ describe Kommando do
       k = Kommando.new "uptime"
       expect(k).to be_an_instance_of(Kommando)
     end
+
+    it 'accepts additional options as the second argument' do
+      k = Kommando.new "uptime", {
+        output: true
+      }
+      expect(k).to be_an_instance_of(Kommando)
+    end
   end
 
   describe 'running' do
@@ -70,6 +77,16 @@ describe Kommando do
         expect(completed_uptime_kommand.out).to match /\d+ users, load averages:/
       end
     end
+
+    describe 'when output enabled' do
+      it 'outputs to standard out' do
+        k = Kommando.new "uptime", {
+          output: true
+        }
+        expect { k.run }.to output(/\d+ users, load averages:/).to_stdout
+      end
+    end
+
   end
 
 end

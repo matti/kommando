@@ -6,9 +6,11 @@ require_relative "kommando/buffer"
 
 class Kommando
 
-  def initialize(cmd)
+  def initialize(cmd, opts={})
     @cmd = cmd
     @stdout = Buffer.new
+
+    @output = opts[:output] == true
   end
 
   def run
@@ -23,6 +25,7 @@ class Kommando
 
             c = stdout.getc
             @stdout.append c if c
+            print c if @output
           end
         end
         thread_stdout.join
