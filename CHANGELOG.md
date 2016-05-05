@@ -1,7 +1,7 @@
 # CHANGELOG
 
-## 0.0.next
-Writes standard out to file.
+## 0.0.4
+Writes standard out to file and timeouts.
 
  - FEAT: Support for command run timeouts with `Kommando.new "ping -c 1 google.com", timeout: 3.5`
  - FEAT: Write output to file with `Kommando.new "ping -c 1 google.com", output: "path/to/file.txt"`
