@@ -1,4 +1,5 @@
 require "pty"
+require "timeout"
 
 require_relative "kommando/error"
 require_relative "kommando/version"
@@ -13,6 +14,12 @@ class Kommando
     @output_stdout = opts[:output] == true
     @output_file = if opts[:output].class == String
       opts[:output]
+    end
+
+    @timeout = if opts[:timeout].class == Float
+      opts[:timeout]
+    elsif opts[:timeout].class == Fixnum
+      opts[:timeout].to_f
     end
   end
 
@@ -33,15 +40,38 @@ class Kommando
             stdout_file.write c if @output_file
           end
         end
-        thread_stdout.join
+
+        thread_did_timeout = nil
+        if @timeout
+          begin
+            Timeout.timeout(@timeout) do
+              thread_stdout.join
+            end
+          rescue Timeout::Error
+            Process.kill('KILL', pid)
+            thread_did_timeout = true
+          end
+        else
+          thread_stdout.join
+        end
+
         stdout_file.close if @output_file
 
         # http://stackoverflow.com/a/7263243
         Process.wait(pid)
 
-        @code = $?.exitstatus
+        @code = if thread_did_timeout
+          1
+        else
+          $?.exitstatus
+        end
+
       end
-    rescue => ex
+    rescue RuntimeError => ex
+      if ex.message == "can't get Master/Slave device"
+        #suppress, weird stuff.
+      end
+    rescue Errno::ENOENT => ex
       raise Kommando::Error, "Command '#{command}' not found"
     end
 

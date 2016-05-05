@@ -101,6 +101,28 @@ describe Kommando do
       end
     end
 
+    describe 'timeout' do
+      it 'aborts execution with seconds' do
+
+        k = Kommando.new "sleep 10000", {
+          timeout: 1
+        }
+        k.instance_variable_set "@timeout", 0.0001
+
+        k.run
+
+        expect(k.code).to be(1)
+      end
+
+      it 'aborts execution with fractional seconds' do
+        k = Kommando.new "sleep 1", {
+          timeout: 0.0001
+        }
+        k.run
+        expect(k.code).to be(1)
+      end
+    end
+
   end
 
 end
