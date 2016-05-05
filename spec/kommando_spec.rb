@@ -53,7 +53,7 @@ describe Kommando do
 
       it 'calls passes args correctly' do
         k = Kommando.new "head .rspec"
-        k.run
+        expect(k.run).to eq true
         expect(k.code).to eq 0
         # sleep 0.5 # TODO: bin/stress 10 100 makes this fail
         expect(k.out).to eq "--format documentation\r\n--color\r\n"

@@ -9,6 +9,8 @@ def stress iterations
     }
     k.run
     unless k.code == 0
+      print "!FAILED! waiting for 3 seconds"
+      sleep 3 # wait for sync
       puts k.out
       exit 1
     end
