@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.next
+Writes standard out to file.
+
+ - FEAT: Write output to file with `Kommando.new "ping -c 1 google.com", output: "path/to/file.txt"`
+ - EXAMPLES: `stdout_to_file` added.
+
 ## 0.0.3
 Outputs to standard out while executing.
 
@@ -14,7 +20,6 @@ Actually useful initial release.
  - EXAMPLES: `ping` and `exit` added.
 
 ## 0.0.1
-
 Initial release.
 
  - FEAT: Runs command without arguments.
