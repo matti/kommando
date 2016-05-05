@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+require 'tempfile'
+
 describe Kommando do
   it 'has a version number' do
     expect(Kommando::VERSION).not_to be nil
@@ -84,6 +86,18 @@ describe Kommando do
           output: true
         }
         expect { k.run }.to output(/\d+ users, load averages:/).to_stdout
+      end
+
+      it 'outputs to file' do
+        outfile = Tempfile.new
+
+        k = Kommando.new "uptime", {
+          output: outfile.path
+        }
+        expect { k.run }.not_to output(/\d+ users, load averages:/).to_stdout
+
+        contents = File.read outfile.path
+        expect(contents).to match /\d+ users, load averages:/
       end
     end
 
