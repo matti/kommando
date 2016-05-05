@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -e
+
+rake
+bin/e2e
+bin/stress 2 10
+
+echo
+head CHANGELOG.md
+echo
+
+echo "Release to rubygems?"
+read
+echo "Sure?"
+read
+echo "Double sure?"
+bundle exec rake release
