@@ -1,7 +1,13 @@
 # CHANGELOG
 
+## 0.0.3
+Outputs to standard out while executing.
+
+ - FEAT: Output with `Kommando.new "ping -c 1 google.com", output: true`
+ - EXAMPLES: `live_output` added.
+
 ## 0.0.2
-Actually useful intial release.
+Actually useful initial release.
 
  - FEAT: Runs commands with arguments `Kommando.new "ping -c 1 google.com"`
  - FEAT: Captures error code in `k.code`
