@@ -1,17 +1,24 @@
 #!/usr/bin/env ruby
 
 require "./lib/kommando"
+require 'tempfile'
 
 find_examples = Kommando.new "find examples -type f -name *"
 find_examples.run
 
+e2e_output = Tempfile.new
+
 for example in find_examples.out.split("\r\n") do
   print "Running #{example} ".ljust(74, ".")
-  example = Kommando.new "ruby #{example}"
+  example = Kommando.new "ruby #{example}", {
+    output: e2e_output.path
+  }
   example.run
 
-  raise "Example #{example} did not exit cleanly" unless example.code == 0
-
+  unless example.code == 0
+    puts "\n#{File.read(e2e_output.path)}"
+    raise "Example #{example} did not exit cleanly"
+  end
   puts " done"
 end
 
