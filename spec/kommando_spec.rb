@@ -33,21 +33,30 @@ describe Kommando do
       expect(uptime_kommand.run).to be true
     end
 
+    it 'can not run multiple times' do
+      once = Kommando.new "uptime"
+      expect(once.run).to be true
+      expect(once.run).not_to be true
+    end
+
     it 'should raise nice error message when a command is not found' do
       notfound = Kommando.new("thiscommandcanpossiblynotbefoundonthissystemevenin1999 --i-am-pretty-sure")
       expect{notfound.run}.to raise_error(Kommando::Error, "Command 'thiscommandcanpossiblynotbefoundonthissystemevenin1999' not found")
     end
 
     describe 'args' do
-      let(:ping_kommand) { Kommando.new "ping -c 1 127.0.0.1" }
+      let(:head_kommand) { Kommando.new "head .rspec" }
 
       it 'runs a cmd with arguments' do
-        expect(ping_kommand.run).to be true
+        expect(head_kommand.run).to be true
       end
 
       it 'calls passes args correctly' do
-        ping_kommand.run
-        expect(ping_kommand.out).to match /64 bytes from 127.0.0.1/
+        k = Kommando.new "head .rspec"
+        k.run
+        expect(k.code).to eq 0
+        # sleep 0.5 # TODO: bin/stress 10 100 makes this fail
+        expect(k.out).to eq "--format documentation\r\n--color\r\n"
       end
     end
 

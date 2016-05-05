@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+require "./lib/kommando"
+
+def stress iterations
+  iterations.times do |i|
+    k = Kommando.new "rake", {
+      timeout: 10
+    }
+    k.run
+    unless k.code == 0
+      puts k.out
+      exit 1
+    end
+    print "."
+  end
+end
+
+number_of_threads = if ARGV[0]
+  ARGV[0].to_i
+else
+  3
+end
+
+number_of_iterations = if ARGV[1]
+  ARGV[1].to_i
+else
+  100
+end
+
+puts "starting #{number_of_threads} threads for #{number_of_iterations} iterations"
+
+threads = []
+number_of_threads.times do |i|
+  threads << Thread.new do
+    stress number_of_iterations
+  end
+end
+
+threads.each do |thread|
+  thread.join
+end

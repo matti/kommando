@@ -21,9 +21,14 @@ class Kommando
     elsif opts[:timeout].class == Fixnum
       opts[:timeout].to_f
     end
+
+    @executed = false
   end
 
   def run
+    return false if @executed
+    @executed = true
+
     command, *args = @cmd.split " "
     begin
       PTY.spawn(command, *args) do |stdout, stdin, pid|
