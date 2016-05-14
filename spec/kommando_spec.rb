@@ -108,6 +108,29 @@ describe Kommando do
         contents = File.read outfile.path
         expect(contents).to match /\d+ users, load averages:/
       end
+
+      it 'flushes in sync' do
+        outfile = Tempfile.new
+
+        k = Kommando.new "find .", {
+          output: outfile.path
+        }
+        t = Thread.new do
+          k.run
+        end
+
+        sleep 0.005
+
+        contents = ""
+        Timeout.timeout(1) do
+          contents = File.read outfile.path
+        end
+        expect(contents).to match "./.bundle"
+
+        Timeout.timeout(1) do
+          t.join
+        end
+      end
     end
 
     describe 'timeout' do

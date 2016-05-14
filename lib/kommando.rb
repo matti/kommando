@@ -32,7 +32,10 @@ class Kommando
     command, *args = @cmd.split " "
     begin
       PTY.spawn(command, *args) do |stdout, stdin, pid|
-        stdout_file = File.open @output_file, 'w' if @output_file
+        if @output_file
+          stdout_file = File.open @output_file, 'w'
+          stdout_file.sync = true
+        end
 
         Thread.abort_on_exception = true
         thread_stdout = Thread.new do

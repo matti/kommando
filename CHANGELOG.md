@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.NEXT
+Flushes file output in sync
+
+ - FIX: File output is flushed in sync.
+
 ## 0.0.4
 Writes standard out to file and timeouts.
 
