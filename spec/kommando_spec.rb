@@ -125,7 +125,7 @@ describe Kommando do
         Timeout.timeout(1) do
           contents = File.read outfile.path
         end
-        expect(contents).to match "./.bundle"
+        expect(contents).to match ".\r\n./.git"
 
         Timeout.timeout(1) do
           t.join
