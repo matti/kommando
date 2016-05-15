@@ -22,6 +22,7 @@ class Kommando
       opts[:timeout].to_f
     end
 
+    @code = nil
     @executed = false
   end
 
@@ -32,6 +33,11 @@ class Kommando
     command, *args = @cmd.split " "
     begin
       PTY.spawn(command, *args) do |stdout, stdin, pid|
+        # if stdout.eof?
+        #   @executed = false
+        #   return run
+        # end
+
         if @output_file
           stdout_file = File.open @output_file, 'w'
           stdout_file.sync = true
@@ -42,7 +48,15 @@ class Kommando
           while true do
             break if stdout.eof?
 
-            c = stdout.getc
+            c = nil
+            begin
+              Timeout.timeout(0.1) do
+                c = stdout.getc
+              end
+            rescue Timeout::Error
+              # sometimes it just hangs.
+            end
+
             @stdout.append c if c
             print c if @output_stdout
             stdout_file.write c if @output_file
