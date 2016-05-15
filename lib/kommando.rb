@@ -24,6 +24,8 @@ class Kommando
 
     @code = nil
     @executed = false
+
+    @retry = opts[:retry] == true
   end
 
   def run
@@ -33,10 +35,10 @@ class Kommando
     command, *args = @cmd.split " "
     begin
       PTY.spawn(command, *args) do |stdout, stdin, pid|
-        # if stdout.eof?
-        #   @executed = false
-        #   return run
-        # end
+        if @retry && stdout.eof?
+          @executed = false
+          return run
+        end
 
         if @output_file
           stdout_file = File.open @output_file, 'w'
