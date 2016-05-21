@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.6
+Fix Linux harder.
+
+ - FIX: Changed strategy.
+
 ## 0.0.5
 Fixes.
 
