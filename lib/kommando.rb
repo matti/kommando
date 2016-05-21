@@ -7,6 +7,23 @@ require_relative "kommando/buffer"
 
 class Kommando
 
+  # http://stackoverflow.com/a/7263243
+  module SafePTY
+    def self.spawn command, *args, &block
+
+      PTY.spawn(command, *args) do |r,w,p|
+        begin
+          yield r,w,p
+        rescue Errno::EIO
+        ensure
+          Process.wait p
+        end
+      end
+
+      $?.exitstatus
+    end
+  end
+
   def initialize(cmd, opts={})
     @cmd = cmd
     @stdout = Buffer.new
@@ -21,6 +38,7 @@ class Kommando
     elsif opts[:timeout].class == Fixnum
       opts[:timeout].to_f
     end
+    @thread_did_timeout = nil
 
     @code = nil
     @executed = false
@@ -34,7 +52,7 @@ class Kommando
 
     command, *args = @cmd.split " "
     begin
-      PTY.spawn(command, *args) do |stdout, stdin, pid|
+      exitstatus = SafePTY.spawn(command, *args) do |stdout, stdin, pid|
         if @retry && stdout.eof?
           @executed = false
           return run
@@ -65,7 +83,6 @@ class Kommando
           end
         end
 
-        thread_did_timeout = nil
         if @timeout
           begin
             Timeout.timeout(@timeout) do
@@ -73,23 +90,19 @@ class Kommando
             end
           rescue Timeout::Error
             Process.kill('KILL', pid)
-            thread_did_timeout = true
+            @thread_did_timeout = true
           end
         else
           thread_stdout.join
         end
 
         stdout_file.close if @output_file
+      end
 
-        # http://stackoverflow.com/a/7263243
-        Process.wait(pid)
-
-        @code = if thread_did_timeout
-          1
-        else
-          $?.exitstatus
-        end
-
+      @code = if @thread_did_timeout
+        1
+      else
+        exitstatus
       end
     rescue RuntimeError => ex
       if ex.message == "can't get Master/Slave device"
