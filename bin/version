@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ruby -r "./lib/kommando/version" -e "puts Kommando::VERSION"
