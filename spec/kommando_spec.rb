@@ -35,7 +35,7 @@ describe Kommando do
     it 'kills the current run' do
       k = Kommando.new "sleep 10"
       Thread.new do
-        sleep 0.05
+        sleep 0.005
         k.kill
       end
       time_before = Time.now.to_i
