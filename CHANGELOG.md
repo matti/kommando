@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.0.TODO
+## 0.0.7
 Async running, killing the run.
 
  - FEAT: Support async running with `k.run_async`
