@@ -1,10 +1,11 @@
 # CHANGELOG
 
 ## 0.0.TODO
-Async running.
+Async running, killing the run.
 
  - FEAT: Support async running with `k.run_async`
- - EXAMPLES: `async` added.
+ - FEAT: Support for killing the process.
+ - EXAMPLES: `async` and `kill` added.
 
 ## 0.0.6
 Fix Linux harder.

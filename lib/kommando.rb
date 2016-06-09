@@ -29,12 +29,17 @@ class Kommando
     @retry = opts[:retry] == true
 
     @thread = nil
+    @pid = nil
   end
 
   def run_async
     @thread = Thread.new do
       run
     end
+  end
+
+  def kill
+    Process.kill('KILL', @pid)
   end
 
   def run
@@ -48,6 +53,8 @@ class Kommando
           @executed = false
           return run
         end
+
+        @pid = pid
 
         if @output_file
           stdout_file = File.open @output_file, 'w'

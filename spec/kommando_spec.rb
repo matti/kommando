@@ -31,6 +31,21 @@ describe Kommando do
     end
   end
 
+  describe 'killing' do
+    it 'kills the current run' do
+      k = Kommando.new "sleep 10"
+      Thread.new do
+        sleep 0.05
+        k.kill
+      end
+      time_before = Time.now.to_i
+      k.run
+
+      expect(Time.now.to_i).to eq time_before
+      expect(k.code).to be nil
+    end
+  end
+
   describe 'running' do
     let(:uptime_kommand) { Kommando.new "uptime" }
     let(:completed_uptime_kommand) do
