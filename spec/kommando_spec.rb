@@ -42,7 +42,7 @@ describe Kommando do
       k.run
 
       expect(Time.now.to_i).to eq time_before
-      expect(k.code).to be nil
+      expect(k.code).to eq 137
     end
   end
 
@@ -99,7 +99,7 @@ describe Kommando do
 
       it 'has error code on not clean exit' do
         failure = Kommando.new "/usr/bin/false"
-        failure.run
+        failure.run #TODO: once the code this was 0...?
         expect(failure.code).to eq 1
       end
     end

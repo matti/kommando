@@ -10,4 +10,6 @@ Thread.new do
 end
 k.run
 
-puts "Killed while sleeping."
+raise "not 137" unless k.code == 137
+
+puts "Killed while sleeping, exitcode is 137"

@@ -22,6 +22,7 @@ class Kommando
       opts[:timeout].to_f
     end
     @timeout_happened = false
+    @kill_happened = false
 
     @code = nil
     @executed = false
@@ -40,6 +41,7 @@ class Kommando
 
   def kill
     Process.kill('KILL', @pid)
+    @kill_happened = true
   end
 
   def run
@@ -104,7 +106,18 @@ class Kommando
 
       @code = if @timeout_happened
         1
+      elsif @kill_happened
+        137
       else
+        unless $?
+          begin
+            Timeout.timeout(0.1) do
+              Process.wait #WIP: trying to fix weird linux stuff when $? is nil
+            end
+          rescue Timeout::Error
+          end
+        end
+
         $?.exitstatus
       end
     rescue RuntimeError => ex

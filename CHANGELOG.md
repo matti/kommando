@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.TODO
+Improves killing, tries to fix Linux specific issues.
+
+ - FIX: Killed process has status code 137.
+ - MAYBEFIX: Linux: undefined method `exitstatus' for nil:NilClass (NoMethodError)`
+
 ## 0.0.7
 Async running, killing the run.
 
