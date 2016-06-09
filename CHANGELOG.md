@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.TODO
+Async running.
+
+ - FEAT: Support async running with `k.run_async`
+ - EXAMPLES: `async` added.
+
 ## 0.0.6
 Fix Linux harder.
 

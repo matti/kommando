@@ -21,6 +21,16 @@ describe Kommando do
     end
   end
 
+  describe 'running async' do
+    it 'starts in background' do
+      k = Kommando.new "sleep 10"
+
+      time_before = Time.now.to_i
+      k.run_async
+      expect(Time.now.to_i).to eq time_before
+    end
+  end
+
   describe 'running' do
     let(:uptime_kommand) { Kommando.new "uptime" }
     let(:completed_uptime_kommand) do

@@ -27,6 +27,14 @@ class Kommando
     @executed = false
 
     @retry = opts[:retry] == true
+
+    @thread = nil
+  end
+
+  def run_async
+    @thread = Thread.new do
+      run
+    end
   end
 
   def run
