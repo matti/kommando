@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.0.TODO
+## 0.0.8
 Improves killing, tries to fix Linux specific issues.
 
  - FIX: Killed process has status code 137.
