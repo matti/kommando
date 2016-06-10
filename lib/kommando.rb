@@ -31,6 +31,8 @@ class Kommando
 
     @thread = nil
     @pid = nil
+
+    @shell = false
   end
 
   def run_async
@@ -48,7 +50,16 @@ class Kommando
     return false if @executed
     @executed = true
 
-    command, *args = @cmd.split " "
+    command, *args = if @cmd.start_with? "$"
+      @shell = true
+      trash, line = @cmd.split "$"
+      line.lstrip!
+      ["bash", "-c", line]
+    else
+      #command, *args = @cmd.split " "
+      @cmd.split " "
+    end
+
     begin
       PTY.spawn(command, *args) do |stdout, stdin, pid|
         if @retry && stdout.eof?
@@ -132,7 +143,11 @@ class Kommando
   end
 
   def out
-    @stdout.to_s
+    if @shell
+      @stdout.to_s.strip
+    else
+      @stdout.to_s
+    end
   end
 
   def code

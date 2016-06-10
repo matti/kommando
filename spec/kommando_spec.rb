@@ -104,6 +104,32 @@ describe Kommando do
       end
     end
 
+    describe 'shell' do
+      it 'runs a shell command' do
+        shell = Kommando.new "$ echo hello"
+        shell.run
+        expect(shell.out).to eq "hello"
+      end
+
+      it 'runs a shell command with pipes' do
+        shell = Kommando.new "$ echo hello | rev"
+        shell.run
+        expect(shell.out).to eq "olleh"
+      end
+
+      it 'runs a shell command without space after $' do
+        shell = Kommando.new "$echo hello"
+        shell.run
+        expect(shell.out).to eq "hello"
+      end
+
+      it 'runs a shell command with many spaces after $' do
+        shell = Kommando.new "$     echo hello"
+        shell.run
+        expect(shell.out).to eq "hello"
+      end
+    end
+
     describe 'out' do
       it 'is empty if not run' do
         expect(Kommando.new("").out).to eq ""

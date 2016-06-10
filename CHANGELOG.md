@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.TODO
+Support for shell (bash) commands.
+
+ - FEAT: Support for running shell commands with `Kommando.new "$ echo hello | rev"`
+ - EXAMPLES: `shell` added.
+
 ## 0.0.8
 Improves killing, tries to fix Linux specific issues.
 
