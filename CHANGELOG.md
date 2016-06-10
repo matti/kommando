@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.0.TODO
+## 0.0.9
 Support for shell (bash) commands.
 
  - FEAT: Support for running shell commands with `Kommando.new "$ echo hello | rev"`
