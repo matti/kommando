@@ -168,6 +168,46 @@ describe Kommando do
       end
     end
 
+    describe 'envs' do
+      it 'sets ENVs for shell command' do
+        k = Kommando.new "$ echo $KOMMANDO_ENV1 $KOMMANDO_ENV2", {
+          env: {
+            KOMMANDO_ENV1: "hello",
+            KOMMANDO_ENV2: "world"
+          }
+        }
+        k.run
+        expect(k.out).to eq "hello world"
+      end
+
+      it 'sets ENVs for command' do
+        outfile = Tempfile.new
+        File.unlink(outfile.path)
+        expect(File.exist?(outfile.path)).to be false
+
+        k = Kommando.new "touch $KOMMANDO_ENV", {
+          env: {
+            KOMMANDO_ENV: outfile.path,
+          }
+        }
+        k.run
+
+        expect(k.code).to eq 0
+        expect(File.exist?(outfile.path)).to be true
+      end
+
+      it 'sets ENVs thataretogether' do
+        k = Kommando.new "$ echo $KOMMANDO_ENV1$KOMMANDO_ENV2", {
+          env: {
+            KOMMANDO_ENV1: "hello",
+            KOMMANDO_ENV2: "world"
+          }
+        }
+        k.run
+        expect(k.out).to eq "helloworld"
+      end
+    end
+
     describe 'timeout' do
       it 'aborts execution with seconds' do
 

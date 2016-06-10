@@ -24,6 +24,8 @@ class Kommando
     @timeout_happened = false
     @kill_happened = false
 
+    @env = opts[:env] || {}
+
     @code = nil
     @executed = false
 
@@ -52,16 +54,45 @@ class Kommando
 
     command, *args = if @cmd.start_with? "$"
       @shell = true
-      trash, line = @cmd.split "$"
+      trash, line = @cmd.split "$", 2
       line.lstrip!
       ["bash", "-c", line]
     else
-      #command, *args = @cmd.split " "
       @cmd.split " "
     end
 
+    @env.each_pair do |k,v|
+      ENV[k.to_s] = v
+    end
+
+    interpolated_args = []
+    if @shell
+      interpolated_args << args.shift
+      shell_line = args[0]
+
+      to_be_interpolated = shell_line.scan(/\$[^\s]*/)
+      to_be_interpolated.each do |to_interpolate|
+        if ENV[to_interpolate]
+          shell_line.gsub!("${to_interpolate}", ENV[to_interpolate])
+        else
+          shell_line.gsub!("${to_interpolate}", "")
+        end
+      end
+
+      interpolated_args << shell_line
+    else
+      args.each do |arg|
+        interpolated_args << if arg.start_with? "$"
+          env_name = arg.split("$")[1]
+          ENV[env_name]
+        else
+          arg
+        end
+      end
+    end
+
     begin
-      PTY.spawn(command, *args) do |stdout, stdin, pid|
+      PTY.spawn(command, *interpolated_args) do |stdout, stdin, pid|
         if @retry && stdout.eof?
           @executed = false
           return run

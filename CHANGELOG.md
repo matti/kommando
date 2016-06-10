@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.TODO
+ENV variable interpolation.
+
+ - FEAT: Support for ENV variables like `Kommando.new "$ echo $HELLO", { env: { HELLO: "world" } }`
+ - EXAMPLES: `env` added.
+
 ## 0.0.9
 Support for shell (bash) commands.
 
