@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.0.TODO
+## 0.0.11
 STDIN support.
 
  - FEAT: Support for writing to STDIN with `k.in << "hello"`
