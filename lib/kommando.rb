@@ -46,6 +46,8 @@ class Kommando
   def kill
     Process.kill('KILL', @pid)
     @kill_happened = true
+
+    sleep 0.001 until @code # let finalize
   end
 
   def run
