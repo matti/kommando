@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.TODO
+STDIN support.
+
+ - FEAT: Support for writing to STDIN with `k.in << "hello"`
+ - EXAMPLES: `in` and `nano` added.
+
 ## 0.0.10
 ENV variable interpolation.
 

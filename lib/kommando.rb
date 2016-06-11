@@ -10,6 +10,7 @@ class Kommando
   def initialize(cmd, opts={})
     @cmd = cmd
     @stdout = Buffer.new
+    @stdin = Buffer.new
 
     @output_stdout = opts[:output] == true
     @output_file = if opts[:output].class == String
@@ -132,6 +133,17 @@ class Kommando
           end
         end
 
+        thread_stdin = Thread.new do
+          while true do
+            c = @stdin.getc
+            unless c
+              sleep 0.01
+              next
+            end
+            stdin.write c
+          end
+        end
+
         if @timeout
           begin
             Timeout.timeout(@timeout) do
@@ -185,5 +197,9 @@ class Kommando
 
   def code
     @code
+  end
+
+  def in
+    @stdin
   end
 end

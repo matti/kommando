@@ -8,6 +8,7 @@ describe Kommando do
 
       time_before = Time.now.to_i
       Thread.new do
+        sleep 0.01 # allow command to start
         k.kill
       end
       k.run

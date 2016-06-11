@@ -12,4 +12,11 @@ class Kommando::Buffer
     @buffer.join ""
   end
 
+  def <<(string)
+    @buffer << string
+  end
+
+  def getc
+    @buffer.shift
+  end
 end
