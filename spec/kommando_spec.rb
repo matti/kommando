@@ -32,16 +32,35 @@ describe Kommando do
   end
 
   describe 'killing' do
-    it 'kills the current run' do
+    it 'kills the synchronous run' do
       k = Kommando.new "sleep 10"
+
+      time_before = Time.now.to_i
       Thread.new do
-        sleep 0.005
         k.kill
       end
-      time_before = Time.now.to_i
       k.run
 
       expect(Time.now.to_i).to eq time_before
+      expect(k.code).to eq 137
+    end
+
+    it 'kills the asynchronous run' do
+      somefile = Tempfile.new
+      File.unlink(somefile.path)
+      expect(File.exist?(somefile.path)).to be false
+
+      k = Kommando.new "touch #{somefile.path}"
+
+
+      k.run_async
+      Thread.new do
+        k.kill
+      end
+
+      sleep 0.01 # time to make the file
+
+      expect(File.exist?(somefile.path)).to be false
       expect(k.code).to eq 137
     end
   end
@@ -156,15 +175,22 @@ describe Kommando do
         }
         expect { k.run }.not_to output(/\d+ users, load averages:/).to_stdout
 
-        sleep 0.1 #TODO: how to test
+        sleep 0.01 until k.code == 0
 
         contents = File.read outfile.path
         expect(contents).to match /\d+ users, load averages:/
       end
 
       it 'flushes in sync' do
-        pending "how to test properly?"
-        fail
+        outfile = Tempfile.new
+        k = Kommando.new "$ echo hello; sleep 1", {
+          output: outfile.path
+        }
+
+        k.run_async
+        sleep 0.05
+
+        expect(k.out).to eq "hello"
       end
     end
 
