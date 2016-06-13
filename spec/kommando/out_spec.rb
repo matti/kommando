@@ -14,5 +14,20 @@ describe Kommando do
 
       expect(uptime.out).to match /\d+ users, load averages:/
     end
+
+    describe 'on' do
+      it "sets matcher" do
+        tmpfile = Tempfile.new
+        k = Kommando.new "nano #{tmpfile.path}", {
+          output: true
+        }
+        k.in << "hello\r"
+        k.in << "\x1B\x1Bx"
+
+        k.out.on "Save modified buffer" do
+          puts "LOL"
+        end
+      end
+    end
   end
 end

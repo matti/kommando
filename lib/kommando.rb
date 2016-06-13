@@ -36,6 +36,11 @@ class Kommando
     @pid = nil
 
     @shell = false
+
+    @matchers = {}
+    @matcher_buffer = ""
+
+    @latency = opts[:latency]
   end
 
   def run_async
@@ -129,17 +134,30 @@ class Kommando
 
             @stdout.append c if c
             print c if @output_stdout
-            stdout_file.write c if @output_file
+
+            if c
+              @matcher_buffer << c
+
+              matchers_copy = @matchers.clone # blocks can insert to @matchers while iteration is undergoing
+              matchers_copy.each_pair do |matcher,block|
+                if @matcher_buffer.match matcher
+                  block.call
+                  @matchers.delete matcher # do not match again  TODO: is this safe?
+                end
+              end
+            end
           end
         end
 
         thread_stdin = Thread.new do
+          sleep 0.1 # allow program to start, do not write "in terminal"
           while true do
             c = @stdin.getc
             unless c
               sleep 0.01
               next
             end
+            sleep @latency if @latency
             stdin.write c
           end
         end
@@ -188,11 +206,19 @@ class Kommando
   end
 
   def out
-    if @shell
+    string = if @shell
       @stdout.to_s.strip
     else
       @stdout.to_s
     end
+
+    kommando = self
+    string.define_singleton_method(:on) do |matcher, &block|
+      matchers = kommando.instance_variable_get(:@matchers)
+      matchers[matcher] = block
+    end
+
+    string
   end
 
   def code
