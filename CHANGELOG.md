@@ -1,8 +1,10 @@
 # CHANGELOG
 
-## 0.0.TODO
-stderr gets redirected to stdout
- - EXAMPLES: `stderr_to_out.rb`
+## 0.0.12
+Support for matching out and running code on match.
+
+ - FEAT: Out matching with `out.on /regexp/, block`.
+ - EXAMPLES: `stderr_to_out.rb`, `in_shell.rb` and `nano_match.rb`
 
 ## 0.0.11
 STDIN support.
