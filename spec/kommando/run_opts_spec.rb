@@ -42,6 +42,7 @@ describe Kommando do
         expect { k.run }.not_to output(/\d+ users, load averages:/).to_stdout
 
         sleep 0.01 until k.code == 0  #TODO: k.wait
+        sleep 0.5
 
         contents = File.read outfile.path
         expect(contents).to match /\d+ users, load averages:/

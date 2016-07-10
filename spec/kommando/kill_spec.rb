@@ -13,7 +13,7 @@ describe Kommando do
       end
       k.run
 
-      expect(Time.now.to_i).to eq time_before
+      expect(Time.now.to_i).to be_within(10).of(time_before)
       expect(k.code).to eq 137
     end
 
