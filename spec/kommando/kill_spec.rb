@@ -22,7 +22,7 @@ describe Kommando do
       File.unlink(somefile.path)
       expect(File.exist?(somefile.path)).to be false
 
-      k = Kommando.new "touch #{somefile.path}"
+      k = Kommando.new "$ touch #{somefile.path}"
 
       k.run_async
       Thread.new do

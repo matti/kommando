@@ -134,6 +134,7 @@ class Kommando
 
             @stdout.append c if c
             print c if @output_stdout
+            stdout_file.write c if @output_file
 
             if c
               @matcher_buffer << c
