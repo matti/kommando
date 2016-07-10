@@ -1,10 +1,10 @@
 require "./lib/kommando"
 
 k = Kommando.new "sleep 2", {
-  timeout: 1
+  timeout: 0.5
 }
 k2 = Kommando.new "sleep 2", {
-  timeout: 1
+  timeout: 0.5
 }
 
 k.run

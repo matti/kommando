@@ -1,11 +1,9 @@
 require "./lib/kommando"
 
-failure = Kommando.new "false"
-failure.run
+failure = Kommando.run "false"
 
 puts "Failure error: #{failure.code}"
 
-success = Kommando.new "true"
-success.run
+success = Kommando.run "true"
 
 puts "Success error: #{success.code}"

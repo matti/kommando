@@ -1,6 +1,5 @@
 require "./lib/kommando"
 
-k = Kommando.new "uptime"
-k.run
+k = Kommando.run "uptime"
 
 puts k.out

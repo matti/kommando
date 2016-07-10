@@ -1,8 +1,6 @@
 require "./lib/kommando"
 
-k = Kommando.new "sleep 0.5"
-k.run_async
-
+k = Kommando.run_async "sleep 0.5"
 puts "started in background"
 
 while (k.code == nil) do

@@ -1,6 +1,4 @@
 require "./lib/kommando"
 
-k = Kommando.new "ping -c 3 google.com"
-k.run
-
+k = Kommando.run "ping -c 3 google.com"
 puts k.out
