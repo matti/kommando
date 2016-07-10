@@ -52,6 +52,8 @@ class Kommando
 
     @matchers = {}
     @matcher_buffer = ""
+
+    @whens = {}
   end
 
   def run_async
@@ -174,6 +176,12 @@ class Kommando
           end
         end
 
+        if @whens[:start]
+          @whens[:start].each do |block|
+            block.call
+          end
+        end
+
         if @timeout
           begin
             Timeout.timeout(@timeout) do
@@ -243,5 +251,13 @@ class Kommando
 
   def wait
     sleep 0.001 until @code
+  end
+
+  def when(event, &block)
+    @whens[event.to_sym] = if @whens[event.to_sym]
+      @whens[event.to_sym] << block
+    else
+      [block]
+    end
   end
 end

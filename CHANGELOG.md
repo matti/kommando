@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.14
+When callbacks
+
+ - FEAT: Callback `k.when "start" block`
+ - EXAMPLES: `when.rb`
+
 ## 0.0.13
 Shorthands for run and run_async, blocking until completed.
 
