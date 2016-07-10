@@ -22,3 +22,5 @@ Thread.new do
 end
 
 k.run
+
+`reset`  #TODO: how to reset in kommando?

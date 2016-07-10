@@ -2,6 +2,8 @@ class Kommando::Buffer
 
   def initialize
     @buffer = []
+
+    @matchers = {}
   end
 
   def append(string)
@@ -18,5 +20,9 @@ class Kommando::Buffer
 
   def getc
     @buffer.shift
+  end
+
+  def on(matcher, &block)
+    @matchers[matcher] = block
   end
 end
