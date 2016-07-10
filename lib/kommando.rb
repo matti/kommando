@@ -54,6 +54,8 @@ class Kommando
     @matcher_buffer = ""
 
     @whens = {}
+
+    @timestamp = (opts[:timestamp] == true)
   end
 
   def run_async
@@ -146,7 +148,21 @@ class Kommando
             end
 
             @stdout.append c if c
-            print c if @output_stdout
+
+            if @output_stdout
+              if @timestamp
+                if c == "\n"
+                  print "\n#{Time.now} "
+                elsif @stdout.to_s.size == 1
+                  print "#{Time.now} #{c}"
+                else
+                  print c
+                end
+              else
+                print c
+              end
+            end
+
             stdout_file.write c if @output_file
 
             if c
