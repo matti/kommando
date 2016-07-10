@@ -18,22 +18,15 @@ describe Kommando do
     end
 
     it 'kills the asynchronous run' do
-      somefile = Tempfile.new
-      File.unlink(somefile.path)
-      expect(File.exist?(somefile.path)).to be false
+      k = Kommando.run_async "$ echo 1"
 
-      k = Kommando.new "$ touch #{somefile.path}"
-
-      k.run_async
       Thread.new do
         sleep 0.001 # TODO: expose started attribute
         k.kill
         expect(k.code).to eq 137
       end
 
-      sleep 0.05 # give time to make the file if killing fails
-
-      expect(File.exist?(somefile.path)).to be false
+      expect(k.out).to eq ""
     end
   end
 end

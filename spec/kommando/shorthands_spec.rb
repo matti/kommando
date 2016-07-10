@@ -30,13 +30,12 @@ describe Kommando do
       end
 
       it 'accepts opts' do
-        k = Kommando.run_async "$ echo hello", {
-          timeout: 0.000001
-        }
-        k.wait
-
-        expect(k.code).to eq 1
-        expect(k.out).to eq ""
+        expect {
+          k = Kommando.run_async "$ echo hello", {
+            output: true
+          }
+          k.wait
+        }.to output(/hello/).to_stdout
       end
     end
   end
