@@ -12,6 +12,12 @@ class Kommando
       k.run
       k
     end
+
+    def run_async(cmd, opts={})
+      k = Kommando.new cmd, opts
+      k.run_async
+      k
+    end
   end
 
   def initialize(cmd, opts={})

@@ -1,9 +1,10 @@
 # CHANGELOG
 
 ## 0.0.13
-Shorthand for run
+Shorthands for run and run_async
 
  - FEAT: Immediate run with `Kommando.run "uptime", {}`
+ - FEAT: Immediate run_async with `Kommando.run_async "uptime", {}`
  - EXAMPLES: `shorthands.rb`
 
 ## 0.0.12

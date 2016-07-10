@@ -3,7 +3,7 @@ require "tempfile"
 
 scratch = Tempfile.new
 
-k = Kommando.new "nano scratch.path", {
+k = Kommando.new "nano #{scratch.path}", {
   output: true
 }
 k.out.on "GNU nano" do
