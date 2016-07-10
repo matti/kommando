@@ -37,7 +37,7 @@ describe Kommando do
         expect(k.run).to eq true
         expect(k.code).to eq 0
         k.wait
-
+        sleep 0.25 #TODO: hnnggh
         expect(k.out).to eq "1\r\n"
       end
     end
