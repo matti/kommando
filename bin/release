@@ -7,7 +7,7 @@ fi
 
 set -e
 
-rake
+rake; rake; rake
 bin/e2e
 bin/stress 2 10
 

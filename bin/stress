@@ -35,6 +35,7 @@ puts "starting #{number_of_threads} threads for #{number_of_iterations} iteratio
 threads = []
 number_of_threads.times do |i|
   threads << Thread.new do
+    sleep(rand(0.9)) # rampup
     stress number_of_iterations
   end
 end
