@@ -11,10 +11,9 @@ describe Kommando do
 
       it 'accepts opts' do
         k = Kommando.run "$ echo hello", {
-          timeout: 0.0001
+          timeout: 0.000001
         }
         expect(k.code).to eq 1
-        expect(k.out).to eq ""
       end
     end
 
@@ -24,7 +23,7 @@ describe Kommando do
         expect(k.code).to be nil
         expect(k.out).to eq ""
 
-        sleep 0.001 until k.code == 0 #TODO: k.wait
+        k.wait
 
         expect(k.code).to eq 0
         expect(k.out).to eq "hello"
@@ -32,9 +31,9 @@ describe Kommando do
 
       it 'accepts opts' do
         k = Kommando.run_async "$ echo hello", {
-          timeout: 0.0001
+          timeout: 0.000001
         }
-        sleep 0.001 until k.code == 1 #TODO: k.wait
+        k.wait
 
         expect(k.code).to eq 1
         expect(k.out).to eq ""

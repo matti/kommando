@@ -1,11 +1,12 @@
 # CHANGELOG
 
 ## 0.0.13
-Shorthands for run and run_async
+Shorthands for run and run_async, blocking until completed.
 
  - FEAT: Immediate run with `Kommando.run "uptime", {}`
  - FEAT: Immediate run_async with `Kommando.run_async "uptime", {}`
- - EXAMPLES: `shorthands.rb`
+ - FEAT: Block until command completes with `k.wait`
+ - EXAMPLES: `shorthands.rb` and `wait.rb`
 
 ## 0.0.12
 Support for matching out and running code on match.

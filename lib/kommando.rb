@@ -240,4 +240,8 @@ class Kommando
   def in
     @stdin
   end
+
+  def wait
+    sleep 0.001 until @code
+  end
 end
