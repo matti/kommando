@@ -39,8 +39,6 @@ class Kommando
 
     @matchers = {}
     @matcher_buffer = ""
-
-    @latency = opts[:latency]
   end
 
   def run_async
@@ -158,7 +156,7 @@ class Kommando
               sleep 0.01
               next
             end
-            sleep @latency if @latency
+
             stdin.write c
           end
         end
