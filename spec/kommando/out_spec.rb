@@ -16,7 +16,7 @@ describe Kommando do
     end
 
     describe 'on' do
-      it "matches" do
+      it 'matches' do
         k = Kommando.new "$ printf 'name: '; read N; printf \"$N OK\""
 
         matched_string = false
@@ -40,6 +40,29 @@ describe Kommando do
         expect(matched_string).to be true
         expect(matched_regexp).to be true
         expect(never_matched).to be true
+      end
+
+      describe 'nested' do
+        it 'adds new matchers on match' do
+          k = Kommando.new "$ printf 'name: '; read N; printf \"$N OK\"; read M; printf \"$M ALSO OK\""
+
+          first_match = false
+          second_match = false
+          k.out.on "hello OK" do
+            first_match = true
+            k.in << "goodbye\n"
+
+            k.out.on /goodbye ALSO OK/ do
+              second_match = true
+            end
+          end
+
+          k.in << "hello\n"
+          k.run
+
+          expect(first_match).to be true
+          expect(second_match).to be true
+        end
       end
     end
   end
