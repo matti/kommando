@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.TODO
+stderr gets redirected to stdout
+ - EXAMPLES: `stderr_to_out.rb`
+
 ## 0.0.11
 STDIN support.
 
