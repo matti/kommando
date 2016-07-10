@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.13
+Shorthand for run
+
+ - FEAT: Immediate run with `Kommando.run "uptime", {}`
+ - EXAMPLES: `shorthands.rb`
+
 ## 0.0.12
 Support for matching out and running code on match.
 

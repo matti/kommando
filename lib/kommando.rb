@@ -6,6 +6,13 @@ require_relative "kommando/version"
 require_relative "kommando/buffer"
 
 class Kommando
+  class << self
+    def run(cmd, opts={})
+      k = Kommando.new cmd, opts
+      k.run
+      k
+    end
+  end
 
   def initialize(cmd, opts={})
     @cmd = cmd
