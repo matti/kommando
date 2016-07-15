@@ -222,6 +222,12 @@ class Kommando
       raise Kommando::Error, "Command '#{command}' not found"
     end
 
+    if @whens[:timeout]
+      @whens[:timeout].each do |block|
+        block.call
+      end
+    end
+
     if @whens[:exit]
       @whens[:exit].each do |block|
         block.call

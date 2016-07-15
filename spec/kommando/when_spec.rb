@@ -29,6 +29,20 @@ describe Kommando do
       expect(exit_called).to be true
     end
 
+    it 'runs block when process timeouts' do
+      timeout_called = false
+      k = Kommando.new "sleep 10", {
+        timeout: 0.01
+      }
+      k.when :timeout do
+        timeout_called = true
+      end
+
+      k.run
+
+      expect(timeout_called).to be true
+    end
+
     it 'runs blocks given with strings' do
       start_called = false
 

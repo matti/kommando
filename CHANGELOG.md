@@ -1,9 +1,10 @@
 # CHANGELOG
 
 ## 0.0.15
-When exit callbacks
+Exit and timeout callbacks
 
 - FEAT: Callback `k.when :exit block`
+- FEAT: Callback `k.when :timeout block`
 - EXAMPLES: `async.rb`
 
 ## 0.0.14
