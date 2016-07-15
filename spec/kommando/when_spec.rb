@@ -31,6 +31,7 @@ describe Kommando do
 
     it 'runs block when process timeouts' do
       timeout_called = false
+
       k = Kommando.new "sleep 10", {
         timeout: 0.01
       }
@@ -53,6 +54,29 @@ describe Kommando do
       k.run
 
       expect(start_called).to be true
+    end
+
+    describe 'order' do
+      it 'start, timeout, exit' do
+        order = []
+
+        k = Kommando.new "uptime", {
+          timeout: 0.001
+        }
+        k.when :exit do
+          order << :exit
+        end
+        k.when :start do
+          order << :start
+        end
+        k.when :timeout do
+          order << :timeout
+        end
+
+        k.run
+
+        expect(order).to eq [:start, :timeout, :exit]
+      end
     end
 
     describe 'multiple' do
