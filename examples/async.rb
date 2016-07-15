@@ -1,9 +1,17 @@
 require "./lib/kommando"
 
-k = Kommando.run_async "sleep 0.5"
+k = Kommando.new "sleep 1"
+
+exited = false
+k.when "exit" do
+  exited = true
+end
+
+k.run_async
 puts "started in background"
 
-while (k.code == nil) do
+
+until (exited) do
   print "."
   sleep 0.1
 end

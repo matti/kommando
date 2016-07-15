@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.15
+When exit callbacks
+
+- FEAT: Callback `k.when :exit block`
+- EXAMPLES: `async.rb`
+
 ## 0.0.14
 When callbacks
 

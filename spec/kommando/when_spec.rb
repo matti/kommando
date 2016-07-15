@@ -17,6 +17,18 @@ describe Kommando do
       expect(start_called).to be true
     end
 
+    it 'runs block when process has exited' do
+      exit_called = false
+
+      k = Kommando.new "uptime"
+      k.when :exit do
+        exit_called = true
+      end
+      k.run
+
+      expect(exit_called).to be true
+    end
+
     it 'runs blocks given with strings' do
       start_called = false
 
