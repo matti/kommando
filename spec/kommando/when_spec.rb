@@ -88,26 +88,34 @@ describe Kommando do
 
     describe 'multiple blocks' do
       it 'runs multiple blocks when process has started' do
-        start1_called = false
-        start2_called = false
+        start_calls = []
+        exit_calls = []
 
         run_completed = false
 
         k = Kommando.new "uptime"
         k.when :start do
-          start1_called = true
+          start_calls << Time.now
           expect(run_completed).to be false
         end
         k.when :start do
-          start2_called = true
+          start_calls << Time.now
+          expect(run_completed).to be false
+        end
+        k.when :exit do
+          exit_calls << Time.now
+          expect(run_completed).to be false
+        end
+        k.when :exit do
+          exit_calls << Time.now
           expect(run_completed).to be false
         end
 
         k.run
         run_completed = true
 
-        expect(start1_called).to be true
-        expect(start2_called).to be true
+        expect(start_calls.size).to eq 2
+        expect(exit_calls.size).to eq 2
       end
     end
 
