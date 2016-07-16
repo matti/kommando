@@ -4,6 +4,7 @@ require "timeout"
 require_relative "kommando/error"
 require_relative "kommando/version"
 require_relative "kommando/buffer"
+require_relative "kommando/when"
 
 class Kommando
   class << self
@@ -60,6 +61,7 @@ class Kommando
     @matcher_buffer = ""
 
     @whens = {}
+    @when = When.new
   end
 
   def run_async
@@ -182,11 +184,7 @@ class Kommando
           end
         end
 
-        if @whens[:start]
-          @whens[:start].each do |block|
-            block.call
-          end
-        end
+        @when.fire :start
 
         if @timeout
           begin
@@ -228,17 +226,8 @@ class Kommando
       raise Kommando::Error, "Command '#{command}' not found"
     end
 
-    if @timeout_happened && @whens[:timeout]
-      @whens[:timeout].each do |block|
-        block.call
-      end
-    end
-
-    if @whens[:exit]
-      @whens[:exit].each do |block|
-        block.call
-      end
-    end
+    @when.fire :timeout if @timeout_happened
+    @when.fire :exit
 
     true
   end
@@ -272,10 +261,6 @@ class Kommando
   end
 
   def when(event, &block)
-    @whens[event.to_sym] = if @whens[event.to_sym]
-      @whens[event.to_sym] << block
-    else
-      [block]
-    end
+    @when.register event, block
   end
 end
