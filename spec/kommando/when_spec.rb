@@ -131,5 +131,16 @@ describe Kommando do
       end
     end
 
+    describe 'event names' do
+      it 'validates' do
+        k = Kommando.new "uptime"
+        expect {
+          k.when :not_valid_event do
+            1
+          end
+        }.to raise_error(Kommando::Error, "When 'not_valid_event' is not known.")
+      end
+    end
+
   end
 end

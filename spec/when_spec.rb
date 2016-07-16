@@ -22,4 +22,22 @@ describe Kommando::When do
       expect(registered).to be true
     end
   end
+
+  describe 'register' do
+    it 'validates' do
+      w = Kommando::When.new
+      expect {
+        w.register :not_valid_event, nil
+      }.to raise_error(Kommando::Error, "When 'not_valid_event' is not known.")
+    end
+  end
+
+  describe 'fire' do
+    it 'validates' do
+      w = Kommando::When.new
+      expect {
+        w.fire :not_valid_event
+      }.to raise_error(Kommando::Error, "When 'not_valid_event' is not known.")
+    end
+  end
 end

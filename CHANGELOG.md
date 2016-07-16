@@ -6,6 +6,7 @@ Exit and timeout callbacks, output shorthand.
 - FEAT: Shorthand `Kommando.puts "uptime"`
 - FEAT: Callback `k.when :exit block`
 - FEAT: Callback `k.when :timeout block`
+- FEAT: Callback names are validated.
 - EXAMPLES: `async.rb`
 
 ## 0.0.14
