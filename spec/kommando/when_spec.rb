@@ -49,6 +49,18 @@ describe Kommando do
 
         expect(timeout_called).to be true
       end
+
+      it 'does not run unless timeouts' do
+        timeout_called = false
+
+        k = Kommando.new "uptime"
+        k.when :timeout do
+          timeout_called = true
+        end
+        k.run
+
+        expect(timeout_called).to be false
+      end
     end
 
     it 'runs blocks given with strings' do

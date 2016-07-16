@@ -228,7 +228,7 @@ class Kommando
       raise Kommando::Error, "Command '#{command}' not found"
     end
 
-    if @whens[:timeout]
+    if @timeout_happened && @whens[:timeout]
       @whens[:timeout].each do |block|
         block.call
       end
