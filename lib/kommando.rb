@@ -18,6 +18,12 @@ class Kommando
       k.run_async
       k
     end
+
+    def puts(cmd, opts={})
+      k = Kommando.new cmd, opts
+      k.run
+      Kernel.puts k.out
+    end
   end
 
   def initialize(cmd, opts={})

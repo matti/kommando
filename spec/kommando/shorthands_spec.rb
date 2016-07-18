@@ -2,6 +2,14 @@ require 'spec_helper'
 
 describe Kommando do
   describe 'shorthands' do
+    describe 'puts' do
+      it 'outputs to stdout' do
+        expect {
+          Kommando.puts "$ echo hello"
+        }.to output(/^hello$/).to_stdout
+      end
+    end
+
     describe 'run' do
       it 'runs immediately' do
         k = Kommando.run "$ echo hello"

@@ -1,8 +1,9 @@
 # CHANGELOG
 
 ## 0.0.15
-Exit and timeout callbacks
+Exit and timeout callbacks, output shorthand.
 
+- FEAT: Shorthand `Kommando.puts "uptime"`
 - FEAT: Callback `k.when :exit block`
 - FEAT: Callback `k.when :timeout block`
 - EXAMPLES: `async.rb`

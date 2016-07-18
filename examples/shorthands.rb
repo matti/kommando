@@ -10,4 +10,4 @@ k.wait
 
 raise "err" unless k.out == "hello"
 
-puts k.out
+Kommando.puts "$ echo ok"
