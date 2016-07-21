@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.0.16
+Error callback, optional retry running.
 
 - FEAT: Retry a certain ThreadError case with `Kommando.run "uptime", {retry: {times: 3}}`
 - FEAT: Optionally perform sleep before the retry with `Kommando.run "uptime", {retry: {times: 3, sleep: 2}}`
