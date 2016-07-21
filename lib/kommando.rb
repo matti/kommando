@@ -51,8 +51,16 @@ class Kommando
     @code = nil
     @executed = false
 
-    @retry_times_total = opts[:retry][:times] if opts[:retry] && opts[:retry][:times]
-    @retry_time = @retry_times_total if @retry_times_total
+    if opts[:retry]
+      if opts[:retry][:times]
+        @retry_times_total = opts[:retry][:times]
+        @retry_time = @retry_times_total
+      end
+      if opts[:retry][:sleep]
+        @retry_sleep = opts[:retry][:sleep]
+      end
+    end
+
     @start_fired = false
 
     @thread = nil
@@ -228,6 +236,7 @@ class Kommando
         if @retry_time && @retry_time > 0
           @executed = false
           @retry_time -= 1
+          sleep @retry_sleep if @retry_sleep
           @when.fire :retry
           return run
         end

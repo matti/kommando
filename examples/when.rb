@@ -72,4 +72,23 @@ end
 raise "got_retry_times not 3 (is #{got_retry_times})" unless got_retry_times == 3
 raise "got_error_times not 1" unless got_error_times == 1
 
+
+k = Kommando.new "thread_not_available_situation_for_example_in_heroku", {
+  retry: {
+    times: 1,
+    sleep: 0.5
+  }
+}
+
+k.define_singleton_method :make_pty_testable do
+  raise ThreadError, "can't create Thread: Resource temporarily unavailable"
+end
+
+started = Time.now
+begin
+  k.run
+rescue
+end
+delta = (Time.now-started).round(1)
+raise "sleep does not work (delta is: #{delta})" unless delta == 0.5
 puts "end"

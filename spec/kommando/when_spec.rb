@@ -165,6 +165,33 @@ describe Kommando do
         expect(retry_called_times).to eq 2
         expect(k.out).to match /load averages/
       end
+
+      it 'runs retry callback on exception ThreadError "can\'t create Thread: Resource temporarily unavailable" and with sleep in between and succeeds on the third time' do
+        k = Kommando.new "uptime", {
+          retry: {
+            times: 3,
+            sleep: 0.1
+          }
+        }
+
+        k.define_singleton_method(:make_pty_testable) do
+          if @retry_time > 1
+            raise ThreadError, "can't create Thread: Resource temporarily unavailable"
+          else
+            PTY
+          end
+        end
+
+        started = Time.now
+        times_between_retries = []
+        k.when :retry do
+          times_between_retries << (Time.now - started).to_f.round(1)
+        end
+
+        k.run
+        expect(times_between_retries).to eq [0.1,0.2]
+        expect(k.code).to eq 0
+      end
     end
 
     describe 'order' do
