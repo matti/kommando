@@ -232,6 +232,36 @@ describe Kommando do
         expect(order).to eq [:retry, :retry, :start, :exit]
       end
 
+      it 'retry, retry, start, exit' do
+        order = []
+
+        k = Kommando.new "uptime", {
+          retry: {
+            times: 3
+          }
+        }
+
+        expect(PTY).to receive(:spawn).exactly(4).times.and_raise(ThreadError, "can't create Thread: Resource temporarily unavailable")
+
+        k.when :start do
+          order << :start #never
+        end
+        k.when :retry do
+          order << :retry
+        end
+        k.when :error do
+          order << :error
+        end
+        k.when :exit do
+          order << :exit
+        end
+        expect {
+          k.run
+        }.to raise_error ThreadError, "can't create Thread: Resource temporarily unavailable"
+
+        expect(order).to eq [:retry, :retry, :retry, :error, :exit]
+      end
+
       it 'start, timeout, exit' do
         order = []
 
