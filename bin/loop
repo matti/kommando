@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require "./lib/kommando"
+
+while true do
+  k = Kommando.new "rake", {
+    timeout: 5
+  }
+
+  k.when :timeout do
+    print "t"
+    puts k.out
+    k.kill
+  end
+  k.when :error do
+    print "e"
+  end
+
+  k.run
+
+  if k.code == 0
+    print "."
+  end
+end
