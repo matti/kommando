@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.19
+Fixes Linux
+
+- FIX: Linux broken. Should run tests in Linux...
+
 ## 0.0.18
 Fixes thread leak and some hangs.
 

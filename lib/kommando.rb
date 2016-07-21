@@ -295,7 +295,15 @@ class Kommando
         flushing = true
       end
 
-      c = stdout.getc
+      c = nil
+      begin
+        c = stdout.getc
+      rescue Errno::EIO
+        # Linux http://stackoverflow.com/a/7263243
+        # TODO: only try-catch on linux?
+        break
+      end
+
       break if flushing == true && c == nil
       next unless c
 
