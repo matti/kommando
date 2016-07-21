@@ -134,7 +134,77 @@ describe Kommando do
       end
     end
 
+    describe 'retry' do
+      it 'runs retry callback on exception ThreadError "can\'t create Thread: Resource temporarily unavailable" and succeeds on third time' do
+        retry_called_times = 0
+
+        k = Kommando.new "uptime", {
+          retry: {
+            times: 3
+          }
+        }
+
+        mock_pty = class_double("PTY")
+        expect(mock_pty).to receive(:spawn).exactly(2).times.and_raise(ThreadError, "can't create Thread: Resource temporarily unavailable")
+
+        k.define_singleton_method(:make_pty_testable) do
+          pty_for_this_time = if @retry_time > 1
+            mock_pty
+          else
+            PTY
+          end
+
+          pty_for_this_time
+        end
+
+        k.when :retry do
+          retry_called_times += 1
+        end
+        k.run
+
+        expect(retry_called_times).to eq 2
+        expect(k.out).to match /load averages/
+      end
+    end
+
     describe 'order' do
+      it 'retry, retry, start, exit' do
+        order = []
+
+        k = Kommando.new "uptime", {
+          retry: {
+            times: 3
+          }
+        }
+
+        mock_pty = class_double("PTY")
+        expect(mock_pty).to receive(:spawn).exactly(2).times.and_raise(ThreadError, "can't create Thread: Resource temporarily unavailable")
+
+        k.define_singleton_method(:make_pty_testable) do
+          pty_for_this_time = if @retry_time > 1
+            mock_pty
+          else
+            PTY
+          end
+
+          pty_for_this_time
+        end
+
+        k.when :start do
+          order << :start
+        end
+        k.when :retry do
+          order << :retry
+        end
+        k.when :exit do
+          order << :exit
+        end
+
+        k.run
+
+        expect(order).to eq [:retry, :retry, :start, :exit]
+      end
+
       it 'start, timeout, exit' do
         order = []
 

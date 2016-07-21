@@ -2,6 +2,7 @@
 
 ## 0.0.16
 
+- FEAT: Retry a certain ThreadError case with `Kommando.run "uptime", {retry: {times: 3}}`
 - FEAT: Callback names are validated.
 - FEAT: Callback `k.when :error block` on all known and unknown error states.
 - EXAMPLES: `when.rb` updated

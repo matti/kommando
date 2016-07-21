@@ -51,7 +51,9 @@ class Kommando
     @code = nil
     @executed = false
 
-    @retry = opts[:retry] == true
+    @retry_times_total = opts[:retry][:times] if opts[:retry] && opts[:retry][:times]
+    @retry_time = @retry_times_total if @retry_times_total
+    @start_fired = false
 
     @thread = nil
     @pid = nil
@@ -122,12 +124,7 @@ class Kommando
     end
 
     begin
-      PTY.spawn(command, *interpolated_args) do |stdout, stdin, pid|
-        if @retry && stdout.eof?
-          @executed = false
-          return run
-        end
-
+      make_pty_testable.spawn(command, *interpolated_args) do |stdout, stdin, pid|
         @pid = pid
 
         if @output_file
@@ -185,7 +182,7 @@ class Kommando
           end
         end
 
-        @when.fire :start
+        @when.fire :start unless @start_fired
 
         if @timeout
           begin
@@ -228,8 +225,17 @@ class Kommando
       end
     rescue ThreadError => ex
       if ex.message == "can't create Thread: Resource temporarily unavailable"
+        if @retry_time && @retry_time > 0
+          @executed = false
+          @retry_time -= 1
+          @when.fire :retry
+          return run
+        end
+
+        raise_after_callbacks(ex)
+      else
+        raise_after_callbacks(ex)
       end
-      raise_after_callbacks(ex)
     rescue Errno::ENOENT => ex
       @when.fire :error
       raise Kommando::Error, "Command '#{command}' not found"
@@ -281,5 +287,9 @@ class Kommando
     @when.fire :error
     @when.fire :exit
     raise exception
+  end
+
+  def make_pty_testable
+    PTY
   end
 end

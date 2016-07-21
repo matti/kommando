@@ -44,4 +44,32 @@ end
 
 raise "got_error not set" unless got_error
 
+
+k = Kommando.new "thread_not_available_situation_for_example_in_heroku", {
+  retry: {
+    times: 3
+  }
+}
+
+k.define_singleton_method :make_pty_testable do
+  raise ThreadError, "can't create Thread: Resource temporarily unavailable"
+end
+
+got_retry_times = 0
+got_error_times = 0
+k.when :retry do
+  got_retry_times += 1
+end
+k.when :error do
+  got_error_times += 1
+end
+
+begin
+  k.run
+rescue
+end
+
+raise "got_retry_times not 3 (is #{got_retry_times})" unless got_retry_times == 3
+raise "got_error_times not 1" unless got_error_times == 1
+
 puts "end"
