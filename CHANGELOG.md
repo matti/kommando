@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.18
+Fixes thread leak and some hangs.
+
+- FIX: Fixes hang when reading stdout.
+- FIX: Thread leak.
+
 ## 0.0.17
 Fixes race condition and reduces the number of threads Kommando creates.
 

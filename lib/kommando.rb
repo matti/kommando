@@ -52,6 +52,7 @@ class Kommando
 
     @code = nil
     @executed = false
+    @process_completed = false
 
     if opts[:retry]
       if opts[:retry][:times]
@@ -155,7 +156,12 @@ class Kommando
         thread_stdin = Thread.new do
           sleep 0.1 # allow program to start, do not write "in terminal"
           while true do
+            break if @process_completed
+            # c = nil
+            # Timeout.timeout(1) do
             c = @stdin.getc
+            #end
+
             unless c
               sleep 0.01
               next
@@ -170,15 +176,16 @@ class Kommando
         if @timeout
           begin
             Timeout.timeout(@timeout) do
-              process_stdout(stdout, stdout_file)
+              process_stdout(pid, stdout, stdout_file)
             end
           rescue Timeout::Error
             Process.kill('KILL', pid)
             @timeout_happened = true
           end
         else
-          process_stdout(stdout, stdout_file)
+          process_stdout(pid, stdout, stdout_file)
         end
+        @process_completed = true
 
         stdout_file.close if @output_file
       end
@@ -279,17 +286,17 @@ class Kommando
     PTY
   end
 
-  def process_stdout(stdout, stdout_file)
+  def process_stdout(pid, stdout, stdout_file)
+    flushing = false
     while true do
       begin
-        break if stdout.eof?
-      rescue Errno::EIO
-        # Linux http://stackoverflow.com/a/7263243
-        break
+        Process.getpgid(pid)
+      rescue Errno::ESRCH => ex
+        flushing = true
       end
 
       c = stdout.getc
-
+      break if flushing == true && c == nil
       next unless c
 
       @stdout.append c if c

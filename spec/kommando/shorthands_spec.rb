@@ -18,10 +18,11 @@ describe Kommando do
       end
 
       it 'accepts opts' do
-        k = Kommando.run "$ echo hello", {
-          timeout: 0.000001
-        }
-        expect(k.code).to eq 1
+        expect {
+          k = Kommando.run "$ echo hello", {
+            output: true
+          }
+        }.to output(/hello/).to_stdout
       end
     end
 
