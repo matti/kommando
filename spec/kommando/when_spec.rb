@@ -75,6 +75,65 @@ describe Kommando do
       expect(start_called).to be true
     end
 
+    describe 'error' do
+
+      it 'runs error, exit callbacks on RuntimeError "can\'t get Master/Slave device" and supress' do
+        error_called = false
+        exit_called = false
+        k = Kommando.new "uptime"
+
+        allow(PTY).to receive(:spawn).and_raise(RuntimeError, "can't get Master/Slave device")
+
+        k.when :error do
+          error_called = true
+        end
+        k.when :exit do
+          exit_called = true
+        end
+
+        k.run
+
+        expect(error_called).to be true
+        expect(exit_called).to be true
+      end
+
+      it 'runs error, exit callback on exception ThreadError "can\'t create Thread: Resource temporarily unavailable" and raise' do
+        error_called = false
+        exit_called = false
+        k = Kommando.new "uptime"
+
+        allow(PTY).to receive(:spawn).and_raise(ThreadError, "can't create Thread: Resource temporarily unavailable")
+
+        k.when :error do
+          error_called = true
+        end
+        k.when :exit do
+          exit_called = true
+        end
+        expect {
+          k.run
+        }.to raise_error ThreadError, "can't create Thread: Resource temporarily unavailable"
+
+        expect(error_called).to be true
+        expect(exit_called).to be true
+      end
+
+      it 'runs error callback on non existing command and raise' do
+        error_called = false
+
+        k = Kommando.new "not_existing_command_with non_existing_args"
+        k.when :error do
+          error_called = true
+        end
+
+        expect {
+          k.run
+        }.to raise_error(Kommando::Error, "Command 'not_existing_command_with' not found")
+
+        expect(error_called).to be true
+      end
+    end
+
     describe 'order' do
       it 'start, timeout, exit' do
         order = []
@@ -95,6 +154,31 @@ describe Kommando do
         k.run
 
         expect(order).to eq [:start, :timeout, :exit]
+      end
+
+      it 'error, exit' do
+        order = []
+
+        k = Kommando.new "uptime", {
+          timeout: 0.001
+        }
+        allow(PTY).to receive(:spawn).and_raise(ThreadError, "can't create Thread: Resource temporarily unavailable")
+
+        k.when :start do
+          order << :start #never
+        end
+        k.when :exit do
+          order << :exit
+        end
+        k.when :error do
+          order << :error
+        end
+
+        expect {
+          k.run
+        }.to raise_error ThreadError, "can't create Thread: Resource temporarily unavailable"
+
+        expect(order).to eq [:error, :exit]
       end
     end
 

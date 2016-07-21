@@ -44,6 +44,7 @@ class Kommando
     end
     @timeout_happened = false
     @kill_happened = false
+    @rescue_happened = false
 
     @env = opts[:env] || {}
 
@@ -221,9 +222,19 @@ class Kommando
     rescue RuntimeError => ex
       if ex.message == "can't get Master/Slave device"
         #suppress, weird stuff.
+        @rescue_happened = true
+      else
+        raise ex
       end
+    rescue ThreadError => ex
+      if ex.message == "can't create Thread: Resource temporarily unavailable"
+      end
+      raise_after_callbacks(ex)
     rescue Errno::ENOENT => ex
+      @when.fire :error
       raise Kommando::Error, "Command '#{command}' not found"
+    ensure
+      @when.fire :error if @rescue_happened
     end
 
     @when.fire :timeout if @timeout_happened
@@ -262,5 +273,13 @@ class Kommando
 
   def when(event, &block)
     @when.register event, block
+  end
+
+  private
+
+  def raise_after_callbacks(exception)
+    @when.fire :error
+    @when.fire :exit
+    raise exception
   end
 end

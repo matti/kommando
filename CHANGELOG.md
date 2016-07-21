@@ -3,6 +3,8 @@
 ## 0.0.16
 
 - FEAT: Callback names are validated.
+- FEAT: Callback `k.when :error block` on all known and unknown error states.
+- EXAMPLES: `when.rb` updated
 
 ## 0.0.15
 Exit and timeout callbacks, output shorthand.
