@@ -28,6 +28,8 @@ class Kommando
   end
 
   def initialize(cmd, opts={})
+    Thread.abort_on_exception=true
+
     @cmd = cmd
     @stdout = Buffer.new
     @stdin = Buffer.new
@@ -82,10 +84,20 @@ class Kommando
   end
 
   def kill
-    Process.kill('KILL', @pid)
-    @kill_happened = true
+    begin
+      Process.kill('KILL', @pid)
+    rescue Errno::ESRCH => ex
+      raise ex # see if happens
+    end
 
-    sleep 0.001 until @code # let finalize
+    @kill_happened = true
+    begin
+      Timeout.timeout(1) do
+        sleep 0.001 until @code # let finalize
+      end
+    rescue Timeout::Error => ex
+      raise ex # let's see if happens
+    end
   end
 
   def run
@@ -140,43 +152,6 @@ class Kommando
           stdout_file.sync = true
         end
 
-        Thread.abort_on_exception = true
-        thread_stdout = Thread.new do
-          while true do
-            begin
-              break if stdout.eof?
-            rescue Errno::EIO
-              # Linux http://stackoverflow.com/a/7263243
-              break
-            end
-
-            c = nil
-            begin
-              Timeout.timeout(0.1) do
-                c = stdout.getc
-              end
-            rescue Timeout::Error
-              # sometimes it just hangs.
-            end
-
-            @stdout.append c if c
-            print c if @output_stdout
-            stdout_file.write c if @output_file
-
-            if c
-              @matcher_buffer << c
-
-              matchers_copy = @matchers.clone # blocks can insert to @matchers while iteration is undergoing
-              matchers_copy.each_pair do |matcher,block|
-                if @matcher_buffer.match matcher
-                  block.call
-                  @matchers.delete matcher # do not match again  TODO: is this safe?
-                end
-              end
-            end
-          end
-        end
-
         thread_stdin = Thread.new do
           sleep 0.1 # allow program to start, do not write "in terminal"
           while true do
@@ -195,35 +170,19 @@ class Kommando
         if @timeout
           begin
             Timeout.timeout(@timeout) do
-              thread_stdout.join
+              process_stdout(stdout, stdout_file)
             end
           rescue Timeout::Error
             Process.kill('KILL', pid)
             @timeout_happened = true
           end
         else
-          thread_stdout.join
+          process_stdout(stdout, stdout_file)
         end
 
         stdout_file.close if @output_file
       end
 
-      @code = if @timeout_happened
-        1
-      elsif @kill_happened
-        137
-      else
-        unless $?
-          begin
-            Timeout.timeout(0.1) do
-              Process.wait #WIP: trying to fix weird linux stuff when $? is nil
-            end
-          rescue Timeout::Error
-          end
-        end
-
-        $?.exitstatus
-      end
     rescue RuntimeError => ex
       if ex.message == "can't get Master/Slave device"
         #suppress, weird stuff.
@@ -249,6 +208,24 @@ class Kommando
       @when.fire :error
       raise Kommando::Error, "Command '#{command}' not found"
     ensure
+      @code = if @timeout_happened
+        1
+      elsif @kill_happened
+        137
+      else
+        begin
+          Timeout.timeout(0.1) do
+            Process.wait @pid if @pid
+          end
+        rescue Errno::ECHILD => ex
+          # safe to supress, I guess
+        rescue Timeout::Error => ex
+          # seems to be okay...
+        end
+
+        $?.exitstatus
+      end
+
       @when.fire :error if @rescue_happened
     end
 
@@ -301,4 +278,36 @@ class Kommando
   def make_pty_testable
     PTY
   end
+
+  def process_stdout(stdout, stdout_file)
+    while true do
+      begin
+        break if stdout.eof?
+      rescue Errno::EIO
+        # Linux http://stackoverflow.com/a/7263243
+        break
+      end
+
+      c = stdout.getc
+
+      next unless c
+
+      @stdout.append c if c
+      print c if @output_stdout
+      stdout_file.write c if @output_file
+
+      if c
+        @matcher_buffer << c
+
+        matchers_copy = @matchers.clone # blocks can insert to @matchers while iteration is undergoing
+        matchers_copy.each_pair do |matcher,block|
+          if @matcher_buffer.match matcher
+            block.call
+            @matchers.delete matcher # do not match again  TODO: is this safe?
+          end
+        end
+      end
+    end
+  end
+
 end

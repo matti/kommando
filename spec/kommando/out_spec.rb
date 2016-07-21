@@ -10,7 +10,6 @@ describe Kommando do
     it 'has the stdout' do
       uptime = Kommando.new "uptime"
       uptime.run
-      uptime
 
       expect(uptime.out).to match /\d+ users, load averages:/
     end

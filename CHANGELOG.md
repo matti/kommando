@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.0.17
+Fixes race condition and reduces the number of threads Kommando creates.
+
+- FIX: Race condition when accessing stdout.
+- FIX: Do not start thousands of threads with timeout (above)
+- FIX: More reliable exit status
+
 ## 0.0.16
 Error callback, optional retry running.
 

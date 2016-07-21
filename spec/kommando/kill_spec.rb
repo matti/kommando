@@ -18,14 +18,13 @@ describe Kommando do
     end
 
     it 'kills the asynchronous run' do
-      k = Kommando.run_async "$ echo 1"
+      k = Kommando.new "$ sleep 1; echo 1"
+      k.run_async
 
-      Thread.new do
-        sleep 0.001 # TODO: expose started attribute
-        k.kill
-        expect(k.code).to eq 137
-      end
+      sleep 0.25
+      k.kill
 
+      expect(k.code).to eq 137
       expect(k.out).to eq ""
     end
   end

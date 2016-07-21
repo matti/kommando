@@ -265,7 +265,7 @@ describe Kommando do
       it 'start, timeout, exit' do
         order = []
 
-        k = Kommando.new "uptime", {
+        k = Kommando.new "sleep 1", {
           timeout: 0.001
         }
         k.when :exit do

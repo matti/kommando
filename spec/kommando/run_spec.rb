@@ -3,19 +3,14 @@ require 'tempfile'
 
 describe Kommando do
   describe 'run' do
-    let(:uptime_kommand) { Kommando.new "uptime" }
-    let(:completed_uptime_kommand) do
-      uptime = Kommando.new "uptime"
-      uptime.run
-      uptime
-    end
-
     it 'runs the cmd' do
-      expect(uptime_kommand.run).to be true
+      k = Kommando.new "uptime"
+      expect(k.run).to be true
     end
 
     it 'can not run multiple times' do
       once = Kommando.new "uptime"
+
       expect(once.run).to be true
       expect(once.run).not_to be true
     end
@@ -26,10 +21,9 @@ describe Kommando do
     end
 
     describe 'args' do
-      let(:head_kommand) { Kommando.new "head .rspec" }
-
       it 'runs a cmd with arguments' do
-        expect(head_kommand.run).to be true
+        k = Kommando.new "head .rspec"
+        expect(k.run).to be true
       end
 
       it 'calls passes args correctly' do
