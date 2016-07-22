@@ -267,7 +267,11 @@ class Kommando
   end
 
   def wait
-    sleep 0.001 until @code
+    exited = false
+    self.when :exit do
+      exited = true
+    end
+    sleep 0.001 until exited
   end
 
   def when(event, &block)
