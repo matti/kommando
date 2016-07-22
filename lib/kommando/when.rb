@@ -3,6 +3,7 @@ class Kommando::When
 
   def initialize
     @whens = {}
+    @fired = []
   end
 
   def register(event_name, block)
@@ -14,12 +15,15 @@ class Kommando::When
     else
       [block]
     end
+
+    block.call if @fired.include? event_name_as_sym
   end
 
   def fire(event_name)
     event_name_as_sym = event_name.to_sym
     validate_event_name(event_name_as_sym)
 
+    @fired << event_name_as_sym
     return unless blocks = @whens[event_name]
 
     blocks.each do |block|

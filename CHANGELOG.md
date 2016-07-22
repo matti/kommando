@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.20
+
+- FEAT: Run when callbacks immediately if the event already fired.
+
 ## 0.0.19
 Fixes Linux
 

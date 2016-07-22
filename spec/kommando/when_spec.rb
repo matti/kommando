@@ -353,5 +353,29 @@ describe Kommando do
       end
     end
 
+    describe 'already fired' do
+      it 'run already fired events instantly' do
+        calls = []
+
+        k = Kommando.new "uptime"
+        k.when :start do
+          calls << :start_before_run
+        end
+        k.when :exit do
+          calls << :exit_before_run
+        end
+
+        k.run
+
+        k.when :start do
+          calls << :start_after_run
+        end
+        k.when :exit do
+          calls << :exit_after_run
+        end
+
+        expect(calls).to eq [:start_before_run, :exit_before_run, :start_after_run, :exit_after_run]
+      end
+    end
   end
 end
