@@ -10,7 +10,6 @@ while true do
   k.when :timeout do
     print "t"
     puts k.out
-    k.kill
   end
   k.when :error do
     print "e"

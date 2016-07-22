@@ -88,7 +88,7 @@ class Kommando
     begin
       Process.kill('KILL', @pid)
     rescue Errno::ESRCH => ex
-      raise ex # see if happens
+      #raise ex # see if happens
     end
 
     @kill_happened = true
@@ -145,7 +145,10 @@ class Kommando
     end
 
     begin
+      debug "pty before spawn"
       make_pty_testable.spawn(command, *interpolated_args) do |stdout, stdin, pid|
+        debug "pty in spawn"
+
         @pid = pid
 
         if @output_file
@@ -153,25 +156,36 @@ class Kommando
           stdout_file.sync = true
         end
 
-        thread_stdin = Thread.new do
-          sleep 0.1 # allow program to start, do not write "in terminal"
-          while true do
-            break if @process_completed
-            # c = nil
-            # Timeout.timeout(1) do
-            c = @stdin.getc
-            #end
+        thread_stdin = nil
+        self.when :start do
+          thread_stdin = Thread.new do
+            while true do
+              break if @process_completed
+              # c = nil
+              # Timeout.timeout(1) do
+              c = @stdin.getc
+              #end
 
-            unless c
-              sleep 0.01
-              next
+              unless c
+                sleep 0.01
+                next
+              end
+
+              stdin.write c
             end
-
-            stdin.write c
           end
         end
 
-        @when.fire :start unless @start_fired
+
+        debug "thread_stdin started"
+
+        unless @start_fired
+          debug "when :start firing"
+          @when.fire :start
+          debug "when :start fired"
+        else
+          debug "when :start NOT fired, as :start has already been fired"
+        end
 
         if @timeout
           begin
@@ -186,7 +200,9 @@ class Kommando
           process_stdout(pid, stdout, stdout_file)
         end
         @process_completed = true
-
+        debug "thread_stdin joining"
+        thread_stdin.join
+        debug "thread_stdin joined"
         stdout_file.close if @output_file
       end
 
@@ -239,6 +255,7 @@ class Kommando
     @when.fire :timeout if @timeout_happened
     @when.fire :exit
 
+    debug "run returning true"
     true
   end
 
@@ -267,11 +284,13 @@ class Kommando
   end
 
   def wait
+    debug "k.wait starting"
     exited = false
     self.when :exit do
       exited = true
     end
-    sleep 0.001 until exited
+    sleep 0.0001 until exited
+    debug "k.wait done"
   end
 
   def when(event, &block)
@@ -279,6 +298,11 @@ class Kommando
   end
 
   private
+
+  def debug(msg)
+    return unless ENV["DEBUG"]
+    print "|#{msg}"
+  end
 
   def raise_after_callbacks(exception)
     @when.fire :error
@@ -293,6 +317,7 @@ class Kommando
   def process_stdout(pid, stdout, stdout_file)
     flushing = false
     while true do
+      debug "process_stdout started"
       begin
         Process.getpgid(pid)
       rescue Errno::ESRCH => ex
