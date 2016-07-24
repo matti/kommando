@@ -25,4 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-autotest", "~> 1.0"
   spec.add_development_dependency "ZenTest", "~> 4.11"
   spec.add_development_dependency "byebug"
+  spec.add_development_dependency "stackprof"
 end
