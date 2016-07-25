@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "ZenTest", "~> 4.11"
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "stackprof"
+  spec.add_development_dependency "trapper"
 end
