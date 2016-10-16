@@ -18,6 +18,14 @@ class Kommando::Buffer
     @buffer << string
   end
 
+  def write(string)
+    self << string
+  end
+
+  def writeln(string)
+    self.write "#{string}\r"
+  end
+
   def getc
     @buffer.shift
   end

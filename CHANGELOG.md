@@ -1,7 +1,10 @@
 # CHANGELOG
 
-## 0.0.20
+## 0.0.21
+- FEAT: `k.in.write` as an alias for `k.in <<`
+- FEAT: `k.in.writeln` as an shorthand for `k.in.write "lol\r"`
 
+## 0.0.20
 - FEAT: Run when callbacks immediately if the event already fired.
 
 ## 0.0.19
