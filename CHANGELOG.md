@@ -3,6 +3,8 @@
 ## NEXT
 - FEAT: Global timeout with `Kommando.timeout = 1` and `puts Kommando.timeout`
 - FEAT: Global whens with `Kommando.when :timeout block` and clearing with `Kommando.when = nil`
+- FEAT: Callback `k.when :success` if command was run and exited with zero status
+- FEAT: Callback `k.when :failed` if command did not run or exited with non-zero status
 - FIX: `Kommando.puts` shorthand did not return an instance
 
 ## 0.0.21

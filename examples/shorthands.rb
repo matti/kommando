@@ -37,3 +37,21 @@ Kommando.when :timeout do
 end
 
 Kommando.run "$ sleep 10"
+
+Kommando.timeout = nil
+Kommando.when = nil
+
+Kommando.when :success do
+  puts "succes callback"
+end
+
+Kommando.when :failed do
+  puts "failed callback"
+end
+
+Kommando.when :exit do
+  puts "exit callback"
+end
+
+Kommando.run "$ exit 0"
+Kommando.run "$ exit 1"

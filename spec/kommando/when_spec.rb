@@ -3,6 +3,45 @@ require 'spec_helper'
 describe Kommando do
   describe 'when' do
 
+    describe 'success' do
+      it 'runs after command has exited successfully' do
+        success_called = false
+        exit_called = true
+        k = Kommando.new "uptime"
+        k.when :exit do
+          exit_called = true
+        end
+
+        k.when :success do
+          expect(exit_called).to be true
+          success_called = true
+        end
+
+        k.run
+        expect(success_called).to be true
+      end
+    end
+
+    describe 'failed' do
+      it 'runs after command has exited due error or non-zero exit status' do
+        failed_called = false
+        exit_called = true
+        k = Kommando.new "false"
+        k.when :exit do
+          exit_called = true
+        end
+
+        k.when :failed do
+          expect(exit_called).to be true
+          failed_called = true
+        end
+
+        k.run
+        expect(failed_called).to be true
+      end
+    end
+
+
     describe 'start' do
       it 'runs block when process has started' do
         start_called = false
@@ -195,7 +234,7 @@ describe Kommando do
     end
 
     describe 'order' do
-      it 'retry, retry, start, exit' do
+      it 'retry, retry, start, exit, success' do
         order = []
 
         k = Kommando.new "uptime", {
@@ -226,10 +265,16 @@ describe Kommando do
         k.when :exit do
           order << :exit
         end
+        k.when :success do
+          order << :success
+        end
+        k.when :failed do
+          order << :failed #never
+        end
 
         k.run
 
-        expect(order).to eq [:retry, :retry, :start, :exit]
+        expect(order).to eq [:retry, :retry, :start, :exit, :success]
       end
 
       it 'retry, retry, start, exit' do
@@ -255,14 +300,18 @@ describe Kommando do
         k.when :exit do
           order << :exit
         end
+        k.when :failed do
+          order << :failed
+        end
+
         expect {
           k.run
         }.to raise_error ThreadError, "can't create Thread: Resource temporarily unavailable"
 
-        expect(order).to eq [:retry, :retry, :retry, :error, :exit]
+        expect(order).to eq [:retry, :retry, :retry, :error, :exit, :failed]
       end
 
-      it 'start, timeout, exit' do
+      it 'start, timeout, exit, failed' do
         order = []
 
         k = Kommando.new "sleep 1", {
@@ -277,13 +326,16 @@ describe Kommando do
         k.when :timeout do
           order << :timeout
         end
+        k.when :failed do
+          order << :failed
+        end
 
         k.run
 
-        expect(order).to eq [:start, :timeout, :exit]
+        expect(order).to eq [:start, :timeout, :exit, :failed]
       end
 
-      it 'error, exit' do
+      it 'error, exit, failed' do
         order = []
 
         k = Kommando.new "uptime", {
@@ -300,12 +352,15 @@ describe Kommando do
         k.when :error do
           order << :error
         end
+        k.when :failed do
+          order << :failed
+        end
 
         expect {
           k.run
         }.to raise_error ThreadError, "can't create Thread: Resource temporarily unavailable"
 
-        expect(order).to eq [:error, :exit]
+        expect(order).to eq [:error, :exit, :failed]
       end
     end
 

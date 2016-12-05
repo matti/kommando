@@ -287,6 +287,11 @@ class Kommando
 
     @when.fire :timeout if @timeout_happened
     @when.fire :exit
+    if @code == 0
+      @when.fire :success
+    else
+      @when.fire :failed
+    end
 
     debug "run returning true"
     true
@@ -340,6 +345,7 @@ class Kommando
   def raise_after_callbacks(exception)
     @when.fire :error
     @when.fire :exit
+    @when.fire :failed
     raise exception
   end
 

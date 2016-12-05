@@ -1,5 +1,5 @@
 class Kommando::When
-  VALID_EVENTS = :start, :retry, :timeout, :error, :exit
+  VALID_EVENTS = :start, :retry, :timeout, :error, :exit, :success, :failed
 
   def initialize
     @whens = {}
