@@ -8,6 +8,23 @@ describe Kommando do
           Kommando.puts "$ echo hello"
         }.to output(/^hello$/).to_stdout
       end
+
+      it 'returns an instance' do
+        k = Kommando.puts "$ echo hello"
+        expect(k).to be_an_instance_of(Kommando)
+      end
+
+      it 'accepts opts' do
+        k = Kommando.puts "$ sleep 1", {
+          timeout: 0.000000001
+        }
+        timeout_called = false
+        k.when :timeout do
+          timeout_called = true
+        end
+
+        expect(timeout_called).to be_truthy
+      end
     end
 
     describe 'run' do

@@ -24,6 +24,7 @@ class Kommando
       k = Kommando.new cmd, opts
       k.run
       Kernel.puts k.out
+      k
     end
   end
 
