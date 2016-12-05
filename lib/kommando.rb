@@ -9,6 +9,7 @@ require_relative "kommando/when"
 class Kommando
   class << self
     @@timeout = nil
+    @@whens = nil
 
     def run(cmd, opts={})
       k = Kommando.new cmd, opts
@@ -35,6 +36,16 @@ class Kommando
 
     def timeout=(value)
       @@timeout=value
+    end
+
+
+    def when(event_name, &block)
+      @@whens ||= Kommando::When.new
+      @@whens.register event_name, block
+    end
+
+    def when=(w)
+      @@whens = w
     end
   end
 
@@ -90,6 +101,14 @@ class Kommando
 
     @whens = {}
     @when = When.new
+
+    if @@whens
+      @@whens.instance_variable_get("@whens").each_pair do |event_name, blocks|
+        blocks.each do |block|
+          @when.register event_name, block
+        end
+      end
+    end
   end
 
   def run_async

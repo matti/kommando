@@ -26,3 +26,14 @@ k.when :timeout do
   puts "did timeout as expected with global timeout #{Kommando.timeout}"
 end
 k.run
+
+
+Kommando.timeout = 0.0002
+Kommando.when :timeout do
+  puts "Global when timeout 1"
+end
+Kommando.when :timeout do
+  puts "Global when timeout 2"
+end
+
+Kommando.run "$ sleep 10"

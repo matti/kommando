@@ -2,6 +2,7 @@
 
 ## NEXT
 - FEAT: Global timeout with `Kommando.timeout = 1` and `puts Kommando.timeout`
+- FEAT: Global whens with `Kommando.when :timeout block` and clearing with `Kommando.when = nil`
 - FIX: `Kommando.puts` shorthand did not return an instance
 
 ## 0.0.21
