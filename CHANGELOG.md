@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## NEXT
+- FEAT: Global timeout with `Kommando.timeout = 1` and `puts Kommando.timeout`
 - FIX: `Kommando.puts` shorthand did not return an instance
 
 ## 0.0.21

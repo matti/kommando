@@ -8,6 +8,8 @@ require_relative "kommando/when"
 
 class Kommando
   class << self
+    @@timeout = nil
+
     def run(cmd, opts={})
       k = Kommando.new cmd, opts
       k.run
@@ -25,6 +27,14 @@ class Kommando
       k.run
       Kernel.puts k.out
       k
+    end
+
+    def timeout
+      @@timeout
+    end
+
+    def timeout=(value)
+      @@timeout=value
     end
   end
 
@@ -44,7 +54,10 @@ class Kommando
       opts[:timeout]
     elsif opts[:timeout].class == Fixnum
       opts[:timeout].to_f
+    else
+      @timeout = @@timeout
     end
+
     @timeout_happened = false
     @kill_happened = false
     @rescue_happened = false

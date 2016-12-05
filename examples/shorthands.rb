@@ -19,3 +19,10 @@ k = Kommando.puts "$ sleep 10", {
 k.when :timeout do
   puts "did timeout as expected."
 end
+
+Kommando.timeout = 0.0001
+k = Kommando.new "$ sleep 10"
+k.when :timeout do
+  puts "did timeout as expected with global timeout #{Kommando.timeout}"
+end
+k.run
