@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## NEXT
+- FIX: `Kommando.puts` shorthand did not return an instance
+
 ## 0.0.21
 - FEAT: `k.in.write` as an alias for `k.in <<`
 - FEAT: `k.in.writeln` as an shorthand for `k.in.write "lol\r"`
