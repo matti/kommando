@@ -1,7 +1,8 @@
 class Kommando::When
   VALID_EVENTS = :start, :retry, :timeout, :error, :exit, :success, :failed
 
-  def initialize
+  def initialize(parent=nil)
+    @parent = parent
     @whens = {}
     @fired = []
   end
@@ -36,7 +37,11 @@ class Kommando::When
       debug "firing cbs for #{event_name_as_sym}"
       blocks.each do |block|
         debug "firing cb for #{event_name_as_sym}"
-        block.call
+        if @parent
+          block.call(@parent)
+        else
+          block.call
+        end
         debug "fired cb for #{event_name_as_sym}"
       end
     else

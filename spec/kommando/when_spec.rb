@@ -3,6 +3,20 @@ require 'spec_helper'
 describe Kommando do
   describe 'when' do
 
+    describe 'context' do
+      it 'has context available' do
+        k = Kommando.new "uptime"
+        called = false
+        k.when :success do |kontextual_k|
+          called = true
+          expect(kontextual_k).to be_an_instance_of Kommando
+          expect(kontextual_k).to eq k
+        end
+
+        k.run
+        expect(called).to be_truthy
+      end
+    end
     describe 'success' do
       it 'runs after command has exited successfully' do
         success_called = false

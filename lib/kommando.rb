@@ -100,7 +100,7 @@ class Kommando
     @matcher_buffer = ""
 
     @whens = {}
-    @when = When.new
+    @when = When.new(self)
 
     if @@whens
       @@whens.instance_variable_get("@whens").each_pair do |event_name, blocks|

@@ -68,6 +68,17 @@ describe Kommando do
         expect(timeout_called_2).to be_truthy
       end
 
+      it 'will have context available' do
+        called = false
+        Kommando.when :success do |kontextual_k|
+          called = true
+          expect(kontextual_k).to be_an_instance_of Kommando
+          expect(kontextual_k.instance_variable_get("@cmd")).to eq "uptime"
+        end
+
+        Kommando.run "uptime"
+        expect(called).to be_truthy
+      end
     end
   end
 end

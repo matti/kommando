@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## NEXT
+- FEAT: Context available with `k.when :timeout do |kontextual_k|` and `Kommando.when :timeout |kontextual_k|`
 - FEAT: Global timeout with `Kommando.timeout = 1` and `puts Kommando.timeout`
 - FEAT: Global whens with `Kommando.when :timeout block` and clearing with `Kommando.when = nil`
 - FEAT: Callback `k.when :success` if command was run and exited with zero status

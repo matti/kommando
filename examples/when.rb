@@ -92,3 +92,28 @@ end
 delta = (Time.now-started).round(1)
 raise "sleep does not work (delta is: #{delta})" unless delta == 0.5
 puts "end"
+
+
+k = Kommando.new "$ sleep 2", {
+  timeout: 0.01
+}
+k.when :timeout do |kk|
+  puts kk.inspect
+end
+
+k.run
+
+puts "-- Global --"
+
+Kommando.timeout = 0.01
+Kommando.when :timeout do |ks|
+  puts ks.inspect
+end
+Kommando.run "$ sleep 2"
+
+puts "--"
+Kommando.when :success do |ks|
+  puts "out: #{ks.out}"
+end
+
+Kommando.run "uptime"
