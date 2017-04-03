@@ -216,7 +216,7 @@ describe Kommando do
         k.run
 
         expect(retry_called_times).to eq 2
-        expect(k.out).to match /load averages/
+        expect(k.out).to match /load average/
       end
 
       it 'runs retry callback on exception ThreadError "can\'t create Thread: Resource temporarily unavailable" and with sleep in between and succeeds on the third time' do

@@ -6,7 +6,7 @@ describe Kommando do
       k = Kommando.run_async "uptime"
       k.wait
       expect(k.code).to eq 0
-      expect(k.out).to match "load averages"
+      expect(k.out).to match /load average/
     end
 
     it 'does not block if not async' do

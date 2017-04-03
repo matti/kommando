@@ -30,7 +30,7 @@ describe Kommando do
         k = Kommando.new "uptime", {
           output: true
         }
-        expect { k.run }.to output(/\d+ users, load averages:/).to_stdout
+        expect { k.run }.to output(/\d+ users,\s+load average/).to_stdout
       end
 
       it 'outputs to file' do
@@ -39,13 +39,13 @@ describe Kommando do
         k = Kommando.new "uptime", {
           output: outfile.path
         }
-        expect { k.run }.not_to output(/\d+ users, load averages:/).to_stdout
+        expect { k.run }.not_to output(/\d+ users,\s+load average/).to_stdout
 
         k.wait
         sleep 0.5 # wait for flush..
 
         contents = File.read outfile.path
-        expect(contents).to match /\d+ users, load averages:/
+        expect(contents).to match /\d+ users,\s+load average/
       end
 
       it 'flushes in sync' do

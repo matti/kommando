@@ -9,13 +9,13 @@ describe Kommando do
     end
 
     it 'has success code on clean exit' do
-      success = Kommando.new "/usr/bin/true"
+      success = Kommando.new "$ true"
       success.run
       expect(success.code).to eq 0
     end
 
     it 'has error code on not clean exit' do
-      failure = Kommando.new "/usr/bin/false"
+      failure = Kommando.new "$ false"
       failure.run #TODO: once the code this was 0...?
       expect(failure.code).to eq 1
     end

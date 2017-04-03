@@ -11,7 +11,7 @@ describe Kommando do
       uptime = Kommando.new "uptime"
       uptime.run
 
-      expect(uptime.out).to match /\d+ users, load averages:/
+      expect(uptime.out).to match /\d+ users,\s+load average/
     end
 
     describe 'on' do
