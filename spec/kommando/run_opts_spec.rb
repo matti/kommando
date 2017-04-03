@@ -42,7 +42,6 @@ describe Kommando do
         expect { k.run }.not_to output(/\d+ users,\s+load average/).to_stdout
 
         k.wait
-        sleep 0.5 # wait for flush..
 
         contents = File.read outfile.path
         expect(contents).to match /\d+ users,\s+load average/
