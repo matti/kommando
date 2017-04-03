@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "stackprof"
   spec.add_development_dependency "trapper"
+  spec.add_development_dependency "rspec-prof"
 end
