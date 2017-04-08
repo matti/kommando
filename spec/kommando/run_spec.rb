@@ -75,7 +75,7 @@ describe Kommando do
       end
 
       it 'sets ENVs for command' do
-        outfile = Tempfile.new
+        outfile = Tempfile.new "test"
         File.unlink(outfile.path)
         expect(File.exist?(outfile.path)).to be false
 

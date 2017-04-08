@@ -15,7 +15,7 @@ describe Kommando do
       end
 
       it 'takes input in for a command' do
-        tmpfile = Tempfile.new
+        tmpfile = Tempfile.new "test"
         k = Kommando.new "nano #{tmpfile.path}", {
           timeout: 0.5
         }

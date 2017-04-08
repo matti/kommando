@@ -1,7 +1,7 @@
 require "./lib/kommando"
 require "tempfile"
 
-scratch = Tempfile.new
+scratch = Tempfile.new "test"
 
 k = Kommando.new "nano #{scratch.path}", {
   output: true

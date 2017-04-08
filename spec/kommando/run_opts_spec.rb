@@ -34,7 +34,7 @@ describe Kommando do
       end
 
       it 'outputs to file' do
-        outfile = Tempfile.new
+        outfile = Tempfile.new "test"
 
         k = Kommando.new "uptime", {
           output: outfile.path
@@ -48,7 +48,7 @@ describe Kommando do
       end
 
       it 'flushes in sync' do
-        outfile = Tempfile.new
+        outfile = Tempfile.new "test"
         k = Kommando.new "$ echo hello; sleep 1", {
           output: outfile.path
         }

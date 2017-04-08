@@ -1,7 +1,7 @@
 require "./lib/kommando"
 require "tempfile"
 
-outfile = Tempfile.new
+outfile = Tempfile.new "test"
 
 k = Kommando.new "ping -c 3 127.0.0.1", {
   output: outfile.path
