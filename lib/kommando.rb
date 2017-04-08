@@ -63,7 +63,7 @@ class Kommando
 
     @timeout = if opts[:timeout].class == Float
       opts[:timeout]
-    elsif opts[:timeout].class == Fixnum
+    elsif opts[:timeout].class.to_s == "Integer" || opts[:timeout].class.to_s == "Fixnum"
       opts[:timeout].to_f
     else
       @timeout = @@timeout
