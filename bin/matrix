@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require "kommando"
+require "yaml"
+
+`touch "lib/kommando.rb"`  #invalidate docker caches
+
+docker_compose=YAML.load(File.read("docker-compose.yml"))
+services = docker_compose["services"].keys
+
+ks = []
+for service in services
+  k = Kommando.new "docker-compose build #{service}", {
+    output: true
+  }
+  k.run_async
+  ks << k
+end
+
+ks.map(&:wait)
+for k in ks do
+  cmd=k.instance_variable_get(:@cmd)
+  puts "#{cmd}: #{k.code}"
+
+  unless k.code == 0
+   puts k.out
+   puts "with: #{cmd}"
+   raise "not ok"
+  end
+end

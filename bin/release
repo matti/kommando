@@ -9,7 +9,8 @@ set -e
 
 rake; rake; rake
 bin/e2e
-docker-compose build
+bin/matrix
+
 #bin/stress 2 10
 
 echo
