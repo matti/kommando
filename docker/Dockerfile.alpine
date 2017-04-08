@@ -6,7 +6,7 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock kommando.gemspec .git ./
+COPY Gemfile Gemfile.lock kommando.gemspec ./
 COPY lib/kommando/version.rb ./lib/kommando/
 RUN bundle install
 
