@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## x
+- FEAT: Ruby 2.1 compatibility
+- FIX: Ruby 2.4 Fixnum deprecation warning
+
 ## 0.0.22
 - FEAT: Global whens with `Kommando.when :timeout block` and clearing with `Kommando.when = nil`
 - FEAT: Context available with `k.when :timeout do |kontextual_k|` and `Kommando.when :timeout |kontextual_k|`

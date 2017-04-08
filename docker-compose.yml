@@ -1,0 +1,27 @@
+version: '2.1'
+
+services:
+  alpine:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.alpine
+
+  debian:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.debian
+
+  alpine-2.1:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.alpine-2.1
+
+  alpine-2.2:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.alpine-2.2
+
+  alpine-2.3:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.alpine-2.3

@@ -1,0 +1,14 @@
+FROM ruby:2.3-alpine
+
+RUN apk add --no-cache \
+  git build-base \
+  nano bash
+
+WORKDIR /app
+
+COPY Gemfile Gemfile.lock kommando.gemspec .git ./
+COPY lib/kommando/version.rb ./lib/kommando/
+RUN bundle install
+
+COPY . .
+RUN rake
