@@ -3,28 +3,33 @@
 require "kommando"
 require "yaml"
 
-`touch "lib/kommando.rb"`  #invalidate docker caches
-
 docker_compose=YAML.load(File.read("docker-compose.yml"))
 services = docker_compose["services"].keys
 
+Kommando.run("docker-compose build", {
+  output: true
+}).when(:failed) {
+  raise "build failed"
+}
+
 ks = []
 for service in services
-  k = Kommando.new "docker-compose build #{service}", {
-    output: true
-  }
+  k = Kommando.new "docker-compose up #{service}"
   k.run_async
   ks << k
 end
 
-ks.map(&:wait)
-for k in ks do
-  cmd=k.instance_variable_get(:@cmd)
-  puts "#{cmd}: #{k.code}"
+loop do
+  for k in ks do
+    cmd=k.instance_variable_get(:@cmd)
+    puts "#{cmd} (#{(k.code ? "STOP" : "RUNNING")})"
 
-  unless k.code == 0
-   puts k.out
-   puts "with: #{cmd}"
-   raise "not ok"
+    if k.code
+      puts k.out
+      exit 1
+    end
   end
+
+  print "-"*20; puts " #{DateTime.now.to_s}"
+  sleep 2
 end
