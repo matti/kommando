@@ -11,4 +11,4 @@ COPY lib/kommando/version.rb ./lib/kommando/
 RUN bundle install
 
 COPY . .
-RUN rake
+ENTRYPOINT docker/entrypoint.sh
