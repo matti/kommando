@@ -2,7 +2,23 @@ require 'spec_helper'
 
 describe Kommando do
   describe 'when' do
+    describe 'chaining' do
+      it 'can chain whens' do
+        success_called, exit_called = nil, nil
 
+        k = Kommando.new "uptime"
+        k.when(:success) {
+          success_called = true
+        }.when(:exit) {
+          exit_called = true
+        }
+
+        k.run
+
+        expect(success_called).to be_truthy
+        expect(exit_called).to be_truthy
+      end
+    end
     describe 'context' do
       it 'has context available' do
         k = Kommando.new "uptime"

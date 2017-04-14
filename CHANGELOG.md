@@ -2,6 +2,7 @@
 
 ## x
 - FEAT: Ruby 2.1 compatibility
+- FEAT: `k.when` returns `k` so when's can be defined as a chain
 - FIX: Ruby 2.4 Fixnum deprecation warning
 
 ## 0.0.22

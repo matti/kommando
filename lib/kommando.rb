@@ -337,6 +337,7 @@ class Kommando
 
   def when(event, &block)
     @when.register event, block
+    self
   end
 
   private
