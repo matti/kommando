@@ -279,7 +279,11 @@ class Kommando
           # seems to be okay...
         end
 
-        $?.exitstatus
+        if $?
+          $?.exitstatus
+        else
+          137   # sometimes with ruby2.1 ?
+        end
       end
 
       @when.fire :error if @rescue_happened
