@@ -5,6 +5,7 @@ require_relative "kommando/error"
 require_relative "kommando/version"
 require_relative "kommando/buffer"
 require_relative "kommando/when"
+require_relative "kommando/stdout"
 
 class Kommando
   class << self
@@ -53,7 +54,7 @@ class Kommando
     Thread.abort_on_exception=true
 
     @cmd = cmd
-    @stdout = Buffer.new
+    @stdout = Kommando::Stdout.new
     @stdin = Buffer.new
 
     @output_stdout = opts[:output] == true
