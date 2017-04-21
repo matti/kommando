@@ -8,4 +8,6 @@ end.when(:exit) do
   calls << :exit
 end
 
-raise "err" unless calls == [:success, :exit]
+k.run
+
+raise "err" unless calls == [:exit, :success]
