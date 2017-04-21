@@ -3,9 +3,9 @@ require "timeout"
 
 require_relative "kommando/error"
 require_relative "kommando/version"
-require_relative "kommando/buffer"
 require_relative "kommando/when"
 require_relative "kommando/stdout"
+require_relative "kommando/stdin"
 
 class Kommando
   class << self
@@ -55,7 +55,7 @@ class Kommando
 
     @cmd = cmd
     @stdout = Kommando::Stdout.new
-    @stdin = Buffer.new
+    @stdin = Kommando::Stdin.new
 
     @output_stdout = opts[:output] == true
     @output_file = if opts[:output].class == String
