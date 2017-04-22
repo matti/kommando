@@ -54,7 +54,8 @@ class Kommando
     Thread.abort_on_exception=true
 
     @cmd = cmd
-    @stdout = Kommando::Stdout.new
+    @shell = @cmd.start_with? "$"
+    @stdout = Kommando::Stdout.new @shell
     @stdin = Kommando::Stdin.new
 
     @output_stdout = opts[:output] == true
@@ -95,11 +96,6 @@ class Kommando
     @thread = nil
     @pid = nil
 
-    @shell = false
-
-    @matchers = {}
-    @matcher_buffer = ""
-
     @whens = {}
     @when = When.new(self)
 
@@ -139,8 +135,7 @@ class Kommando
     return false if @executed
     @executed = true
 
-    command, *args = if @cmd.start_with? "$"
-      @shell = true
+    command, *args = if @shell
       trash, line = @cmd.split "$", 2
       line.lstrip!
       ["bash", "-c", line]
@@ -303,19 +298,7 @@ class Kommando
   end
 
   def out
-    string = if @shell
-      @stdout.to_s.strip
-    else
-      @stdout.to_s
-    end
-
-    kommando = self
-    string.define_singleton_method(:on) do |matcher, &block|
-      matchers = kommando.instance_variable_get(:@matchers)
-      matchers[matcher] = block
-    end
-
-    string
+    @stdout.to_s
   end
 
   def code
@@ -381,21 +364,9 @@ class Kommando
       break if flushing == true && c == nil
       next unless c
 
-      @stdout.append c if c
+      @stdout << c
       print c if @output_stdout
       stdout_file.write c if @output_file
-
-      if c
-        @matcher_buffer << c
-
-        matchers_copy = @matchers.clone # blocks can insert to @matchers while iteration is undergoing
-        matchers_copy.each_pair do |matcher,block|
-          if @matcher_buffer.match matcher
-            block.call
-            @matchers.delete matcher # do not match again  TODO: is this safe?
-          end
-        end
-      end
     end
   end
 
