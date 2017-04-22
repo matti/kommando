@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+while true; do
+  rake
+  read input
+done
