@@ -2,9 +2,11 @@
 
 ## x
 - DOCS: `demos/ping_monitor.rb`
+- FEAT: `k.out.once` can chain `k.out.every` (`k.out.once(/smth/).every(/aftersmth/)`
+- FEAT: `k.out.every` can chain `k.out.once` (`k.out.every(/smth/).once(/aftersmth/)`
 - FEAT: MatchData will be passed as the first argument of the proc on `k.once` and `k.every`
-- FEAT: `k.every` matching with chaining
-- FEAT: `k.once` matching with chaining (will deprecate `k.on`)
+- FEAT: `k.out.every` matching with chaining
+- FEAT: `k.out.once` matching with chaining (will deprecate `k.on`)
 - FEAT: Ruby 2.1 compatibility
 - FEAT: `k.when` returns `k` so when's can be defined as a chain
 - FIX: Ruby 2.4 Fixnum deprecation warning

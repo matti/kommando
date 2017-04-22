@@ -68,6 +68,16 @@ describe Kommando do
           expect(calls).to eq([:last_hello])
         end
 
+        it 'can chain every' do
+          k = Kommando.new "$ echo hello1 hello2 hello1 hello1"
+          calls = []
+          k.out.once(/hello2/).every(/hello1/) do
+            calls << :hello1
+          end
+
+          k.run
+          expect(calls).to eq([:hello1, :hello1])
+        end
       end
 
       describe 'MatchData' do

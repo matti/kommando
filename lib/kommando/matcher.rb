@@ -21,4 +21,10 @@ class Kommando; class Matcher
     @nested_matchers << m
     m
   end
+
+  def every(regexp, &block)
+    m = Kommando::EveryMatcher.new regexp, block
+    @nested_matchers << m
+    m
+  end
 end; end
