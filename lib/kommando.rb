@@ -6,6 +6,7 @@ require_relative "kommando/version"
 require_relative "kommando/when"
 require_relative "kommando/stdout"
 require_relative "kommando/stdin"
+require_relative "kommando/matcher"
 
 class Kommando
   class << self
@@ -38,7 +39,6 @@ class Kommando
     def timeout=(value)
       @@timeout=value
     end
-
 
     def when(event_name, &block)
       @@whens ||= Kommando::When.new

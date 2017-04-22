@@ -1,7 +1,7 @@
 class Kommando; class Stdout
   def initialize(shell)
     @buffer = []
-    @matchers = {}
+    @matchers = []
     @matcher_buffer = ""
 
     @shell = shell
@@ -12,10 +12,11 @@ class Kommando; class Stdout
     @matcher_buffer << c
 
     matchers_copy = @matchers.clone # blocks can insert to @matchers while iteration is undergoing
-    matchers_copy.each_pair do |matcher,block|
-      if @matcher_buffer.match matcher
-        block.call
-        @matchers.delete matcher # do not match again  TODO: is this safe?
+    matchers_copy.each do |matcher|
+      if matcher.match @matcher_buffer
+        matcher.call
+        @matchers.delete matcher  #TODO: is this safe?
+        @matchers = @matchers + matcher.nested_matchers #TODO: is this safe?
       end
     end
   end
@@ -27,8 +28,17 @@ class Kommando; class Stdout
     string.strip! if @shell
 
     matchers = @matchers
-    string.define_singleton_method(:on) do |matcher, &block|
-      matchers[matcher] = block
+    #TODO: deprecate .on
+    string.define_singleton_method(:on) do |regexp, &block|
+      m = Kommando::Matcher.new regexp, block
+      matchers << m
+      m
+    end
+
+    string.define_singleton_method(:once) do |regexp, &block|
+      m = Kommando::Matcher.new regexp, block
+      matchers << m
+      m
     end
 
     string
