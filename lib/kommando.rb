@@ -1,13 +1,15 @@
 require "pty"
 require "timeout"
 
+class Kommando
+end
+
 require_relative "kommando/error"
 require_relative "kommando/version"
 require_relative "kommando/when"
 require_relative "kommando/stdout"
 require_relative "kommando/stdin"
-require_relative "kommando/matcher"
-require_relative "kommando/every_matcher"
+require_relative "kommando/matchers"
 
 class Kommando
   class << self

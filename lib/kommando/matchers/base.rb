@@ -1,5 +1,6 @@
-class Kommando; class Matcher
+class Kommando::Matchers::Base
   attr_reader :nested_matchers
+  
   def initialize(regexp, block)
     @regexp = regexp
     @block = block
@@ -8,7 +9,7 @@ class Kommando; class Matcher
   end
 
   def match(string)
-    string.match(@regexp)
+    raise "#match not implemented"
   end
 
   def call(match_data=nil)
@@ -17,14 +18,14 @@ class Kommando; class Matcher
   end
 
   def once(regexp, &block)
-    m = self.class.new regexp, block
+    m = Kommando::Matchers::Once.new regexp, block
     @nested_matchers << m
     m
   end
 
   def every(regexp, &block)
-    m = Kommando::EveryMatcher.new regexp, block
+    m = Kommando::Matchers::Every.new regexp, block
     @nested_matchers << m
     m
   end
-end; end
+end
