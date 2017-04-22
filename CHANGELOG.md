@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## x
+- DOCS: `demos/ping_monitor.rb`
 - FEAT: MatchData will be passed as the first argument of the proc on `k.once` and `k.every`
 - FEAT: `k.every` matching with chaining
 - FEAT: `k.once` matching with chaining (will deprecate `k.on`)
