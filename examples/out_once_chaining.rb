@@ -4,7 +4,7 @@ calls_bytes = []
 calls_icmp = []
 calls_ttl_then_time = []
 
-k = Kommando.new("ping -c 3 127.0.0.1", {
+k = Kommando.new("ping -c 3 -i 0.2 127.0.0.1", {
   output: true
 })
 

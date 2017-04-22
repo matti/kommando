@@ -13,10 +13,18 @@ class Kommando; class Stdout
 
     matchers_copy = @matchers.clone # blocks can insert to @matchers while iteration is undergoing
     matchers_copy.each do |matcher|
-      if matcher.match @matcher_buffer
-        matcher.call
-        @matchers.delete matcher  #TODO: is this safe?
-        @matchers = @matchers + matcher.nested_matchers #TODO: is this safe?
+      if (match_data = matcher.match @matcher_buffer)
+        matcher.call match_data
+        unless matcher.class == EveryMatcher
+          @matchers.delete matcher  #TODO: is this safe?
+        end
+
+        matcher.nested_matchers.each do |nested_matcher|
+          if nested_matcher.class == EveryMatcher
+            nested_matcher.skip_with(@matcher_buffer)
+          end
+          @matchers = @matchers + [nested_matcher] #TODO: is this safe?
+        end
       end
     end
   end
@@ -37,6 +45,12 @@ class Kommando; class Stdout
 
     string.define_singleton_method(:once) do |regexp, &block|
       m = Kommando::Matcher.new regexp, block
+      matchers << m
+      m
+    end
+
+    string.define_singleton_method(:every) do |regexp, &block|
+      m = Kommando::EveryMatcher.new regexp, block
       matchers << m
       m
     end

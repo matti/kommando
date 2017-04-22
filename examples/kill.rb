@@ -2,7 +2,7 @@ require "./lib/kommando"
 
 k = Kommando.run_async "sleep 10"
 
-sleep 1
+sleep 0.1
 k.kill
 puts "..killed."
 

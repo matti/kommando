@@ -69,6 +69,19 @@ describe Kommando do
         end
 
       end
+
+      describe 'MatchData' do
+        it 'calls the proc with the MatchData' do
+          k = Kommando.new "$ echo hello hello"
+          calls = []
+          k.out.once /(\w+)\s/ do |m|
+            calls << m[1]
+          end
+          k.run
+
+          expect(calls).to eq(["hello"])
+        end
+      end
     end
   end
 end

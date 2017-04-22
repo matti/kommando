@@ -11,9 +11,9 @@ class Kommando; class Matcher
     string.match(@regexp)
   end
 
-  def call
+  def call(match_data=nil)
     return unless @block
-    @block.call
+    @block.call match_data
   end
 
   def once(regexp, &block)

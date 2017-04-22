@@ -3,7 +3,7 @@ require "tempfile"
 
 outfile = Tempfile.new "test"
 
-k = Kommando.new "ping -c 3 127.0.0.1", {
+k = Kommando.new "ping -c 3 -i 0.2 127.0.0.1", {
   output: outfile.path
 }
 

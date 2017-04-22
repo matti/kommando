@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## x
+- FEAT: MatchData will be passed as the first argument of the proc on `k.once` and `k.every`
+- FEAT: `k.every` matching with chaining
 - FEAT: `k.once` matching with chaining (will deprecate `k.on`)
 - FEAT: Ruby 2.1 compatibility
 - FEAT: `k.when` returns `k` so when's can be defined as a chain

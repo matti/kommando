@@ -7,6 +7,7 @@ require_relative "kommando/when"
 require_relative "kommando/stdout"
 require_relative "kommando/stdin"
 require_relative "kommando/matcher"
+require_relative "kommando/every_matcher"
 
 class Kommando
   class << self
