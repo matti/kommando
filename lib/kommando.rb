@@ -269,19 +269,15 @@ class Kommando
         137
       else
         begin
-          Timeout.timeout(0.1) do
-            Process.wait @pid if @pid
-          end
+          Process.wait @pid if @pid
         rescue Errno::ECHILD => ex
           # safe to supress, I guess
-        rescue Timeout::Error => ex
-          # seems to be okay...
         end
 
         if $?
           $?.exitstatus
         else
-          137   # sometimes with ruby2.1 ?
+          137   # sometimes with ruby2.1 ? (maybefix now?)
         end
       end
 
