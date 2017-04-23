@@ -2,6 +2,11 @@
 
 require "./lib/kommando"
 require "yaml"
+loops=if ARGV[0]
+  ARGV[0].to_i
+else
+  -1
+end
 
 docker_compose=YAML.load(File.read("docker-compose.yml"))
 services = docker_compose["services"].keys
@@ -19,17 +24,31 @@ for service in services
   ks << k
 end
 
+def cleanup(ks)
+  ks.map(&:kill)
+  Kommando.run "docker-compose down"
+end
+
 loop do
+  puts "loops: #{loops}"
+  loops = loops - 1
+
   for k in ks do
     cmd=k.instance_variable_get(:@cmd)
     puts "#{cmd} (#{(k.code ? "STOP" : "RUNNING")})"
 
     if k.code
       puts k.out
+      cleanup(ks)
       exit 1
     end
   end
 
   print "-"*20; puts " #{DateTime.now.to_s}"
   sleep 2
+
+  if loops == 0
+    cleanup(ks)
+    exit 0
+  end
 end

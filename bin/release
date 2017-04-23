@@ -9,7 +9,7 @@ set -e
 
 rake; rake; rake
 bin/e2e
-#bin/matrix
+bin/matrix 3
 bin/stress 2 10
 
 echo
