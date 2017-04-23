@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## x
+## 0.1.0
 - DOCS: `demos/ping_monitor.rb`
 - FEAT: `k.out.once` can chain `k.out.every` (`k.out.once(/smth/).every(/aftersmth/)`
 - FEAT: `k.out.every` can chain `k.out.once` (`k.out.every(/smth/).once(/aftersmth/)`
