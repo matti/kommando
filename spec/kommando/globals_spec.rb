@@ -19,7 +19,7 @@ describe Kommando do
 
       it "affects new instances" do
         Kommando.timeout = 0.0001
-        k = Kommando.new "$ sleep 10"
+        k = Kommando.new "$ sleep 10.4"
         k.run
         timeout_called = false
         k.when :timeout do

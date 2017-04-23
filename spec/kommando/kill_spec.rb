@@ -4,7 +4,7 @@ require 'tempfile'
 describe Kommando do
   describe 'kill' do
     it 'kills the synchronous run' do
-      k = Kommando.new "sleep 10"
+      k = Kommando.new "sleep 10.3"
 
       time_before = Time.now.to_i
       Thread.new do

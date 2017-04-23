@@ -49,7 +49,7 @@ describe Kommando do
 
       it 'flushes in sync' do
         outfile = Tempfile.new "test"
-        k = Kommando.new "$ echo hello; sleep 1", {
+        k = Kommando.new "$ echo hello", {
           output: outfile.path
         }
 

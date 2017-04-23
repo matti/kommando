@@ -107,7 +107,7 @@ describe Kommando do
       it 'runs block when process timeouts' do
         timeout_called = false
 
-        k = Kommando.new "sleep 10", {
+        k = Kommando.new "sleep 10.1", {
           timeout: 0.01
         }
         k.when :timeout do
