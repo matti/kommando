@@ -9,9 +9,8 @@ set -e
 
 rake; rake; rake
 bin/e2e
-bin/matrix
-
-#bin/stress 2 10
+#bin/matrix
+bin/stress 2 10
 
 echo
 head CHANGELOG.md
