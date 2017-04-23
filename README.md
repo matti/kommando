@@ -1,4 +1,5 @@
 # Kommando
+[![Build Status](https://travis-ci.org/matti/kommando.svg?branch=master)](https://travis-ci.org/matti/kommando)
 
 Command runner with expect-like features. Great for integration testing.
 
