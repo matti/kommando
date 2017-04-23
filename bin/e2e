@@ -6,7 +6,7 @@ require 'tempfile'
 find_examples = Kommando.new "find examples -type f -name *"
 find_examples.run
 
-e2e_output = Tempfile.new
+e2e_output = Tempfile.new "test"
 
 for example in find_examples.out.split("\r\n") do
   print "Running #{example} ".ljust(74, ".")
