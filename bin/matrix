@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "kommando"
+require "./lib/kommando"
 require "yaml"
 
 docker_compose=YAML.load(File.read("docker-compose.yml"))
