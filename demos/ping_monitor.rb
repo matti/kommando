@@ -1,3 +1,14 @@
+# $ ruby demos/ping_monitor.rb 
+# 0.077 xxxxxxxxxxxxxxxxxxxxxxx
+# 0.021 xxxxxx
+# 0.027 xxxxxxxx
+# 0.021 xxxxxx
+# 0.021 xxxxxx
+# 0.041 xxxxxxxxxxxx
+# 0.021 xxxxxx
+# 0.023 xxxxxx
+# ^C
+
 require "./lib/kommando"
 
 k = Kommando.new "ping -i 0.2 127.0.0.1"
