@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## TODO
+## 0.1.1
 - FIX: Use `sh` with `Kommando.run "$ ls"` if `bash` was not found.
 
 ## 0.1.0
