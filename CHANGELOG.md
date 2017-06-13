@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## TODO
+- FIX: Use `sh` with `Kommando.run "$ ls"` if `bash` was not found.
+
 ## 0.1.0
 - DOCS: `demos/ping_monitor.rb`
 - FEAT: `k.out.once` can chain `k.out.every` (`k.out.once(/smth/).every(/aftersmth/)`

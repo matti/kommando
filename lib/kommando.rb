@@ -141,7 +141,12 @@ class Kommando
     command, *args = if @shell
       trash, line = @cmd.split "$", 2
       line.lstrip!
-      ["bash", "-c", line]
+
+      if which("bash")
+        ["bash", "-c", line]
+      else
+        ["sh", "-c", line]
+      end
     else
       @cmd.split " "
     end
@@ -328,6 +333,17 @@ class Kommando
   def debug(msg)
     return unless ENV["DEBUG"]
     print "|#{msg}"
+  end
+
+  def which(cmd)
+    exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+    ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+      exts.each { |ext|
+        exe = File.join(path, "#{cmd}#{ext}")
+        return exe if File.executable?(exe) && !File.directory?(exe)
+      }
+    end
+    return nil
   end
 
   def raise_after_callbacks(exception)
