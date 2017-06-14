@@ -142,7 +142,7 @@ class Kommando
       trash, line = @cmd.split "$", 2
       line.lstrip!
 
-      if `command -v bash`
+      if File.exist? "/bin/bash"
         ["bash", "-c", line]
       else
         ["sh", "-c", line]

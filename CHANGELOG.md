@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## TODO
+- FIX: Fix `sh` vs `bash` detection
+
 ## 0.1.1
 - FIX: Use `sh` with `Kommando.run "$ ls"` if `bash` was not found.
 
