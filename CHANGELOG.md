@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## TODO
+## 0.1.2
 - FIX: Fix `sh` vs `bash` detection
 
 ## 0.1.1
